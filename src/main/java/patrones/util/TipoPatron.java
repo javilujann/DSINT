@@ -1,0 +1,12 @@
+package patrones.util;
+
+public enum TipoPatron {
+    INTERVALO_PR_ALARGADO, 
+    INTERVALO_QT_ACORTADO, 
+    INTERVALO_QT_ALARGADO, 
+    COMPLEJO_QRS_ANCHO, 
+    ONDA_T_APLANADA, 
+    ONDA_T_HIPERAGUDA,
+    ONDA_T_PICUDA,
+    ONDA_U_PROMINENTE;
+}
