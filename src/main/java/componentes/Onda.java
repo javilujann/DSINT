@@ -1,20 +1,20 @@
 package componentes;
-import componentes.util.TipoOnda;
+
 
 public class Onda extends Componente {
 	
-	private TipoOnda tipo;
+	private OndaTipo tipo;
 	
-	public Onda(float amplitud, float inicio, float fin, TipoOnda tipo) {
+	public Onda(float amplitud, float inicio, float fin, OndaTipo tipo) {
 		super(amplitud, inicio, fin);
 		this.tipo = tipo;
 	}
 
-	public TipoOnda getTipo() {
+	public OndaTipo getTipo() {
 		return tipo;
 	}
 
-	public void setTipo(TipoOnda tipo) {
+	public void setTipo(OndaTipo tipo) {
 		this.tipo = tipo;
 	}
 

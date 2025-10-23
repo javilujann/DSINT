@@ -1,6 +1,6 @@
 package componentes;
 
-import patrones.PatronPatologico;
+import diagnosticos.PatronPatologico;
 
 public abstract class Componente {
 	

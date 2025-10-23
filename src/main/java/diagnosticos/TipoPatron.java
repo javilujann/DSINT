@@ -1,4 +1,4 @@
-package patrones.util;
+package diagnosticos;
 
 public enum TipoPatron {
     INTERVALO_PR_ALARGADO, 

@@ -1,8 +1,6 @@
 package diagnosticos;
 
-import diagnosticos.util.Severidad;
-import diagnosticos.util.TipoDiagnostico;
-import patrones.PatronPatologico;
+
 
 public class Diagnostico {
 	
