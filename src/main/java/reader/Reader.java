@@ -13,8 +13,9 @@ public class Reader {
             Pattern.compile("([PQRST])\\((\\d+),(\\d+),(-?\\d*\\.?\\d+)\\)");
 
     public static List<Ciclo> leerFichero(String ruta) throws IOException {
+    	int cont = 0;
         List<Ciclo> ciclos = new ArrayList<>();
-        Ciclo cicloActual = new Ciclo();
+        Ciclo cicloActual = new Ciclo(cont);
 
         try (BufferedReader br = new BufferedReader(new FileReader(ruta))) {
             String linea;
@@ -40,8 +41,9 @@ public class Reader {
 
                     // Si llega una onda T, se cierra el ciclo
                     if (tipo == OndaTipo.T) {
+                    	cont ++;
                         ciclos.add(cicloActual);
-                        cicloActual = new Ciclo();
+                        cicloActual = new Ciclo(cont);
                     }
                 }
             }
@@ -73,7 +75,7 @@ public class Reader {
 
             for (int i = 0; i < ciclos.size(); i++) {
                 Ciclo ciclo = ciclos.get(i);
-                System.out.println("Ciclo " + (i + 1) + ": contiene " + ciclo.getOndas().size() + " ondas");
+                System.out.println("Ciclo " + ciclo.getNciclo() + ": contiene " + ciclo.getOndas().size() + " ondas");
 
                 for (Componente comp : ciclo.getOndas()) {
                     if (comp instanceof Onda) {
