@@ -11,10 +11,10 @@ public enum Reader {
 	INSTANCIA;
 
     // Regex: tipo (P,Q,R,S,T), start, end, peak (con signo y decimal opcional)
-    private static final Pattern PATRON_ONDA =
+    private final Pattern PATRON_ONDA =
             Pattern.compile("([PQRST])\\((\\d+),(\\d+),(-?\\d*\\.?\\d+)\\)");
 
-    public static List<Ciclo> leerFichero(String ruta) throws IOException {
+    public List<Ciclo> leerFichero(String ruta) throws IOException {
     	int cont = 0;
         List<Ciclo> ciclos = new ArrayList<>();
         Ciclo cicloActual = new Ciclo(cont);
@@ -69,7 +69,7 @@ public enum Reader {
         System.out.println("Directorio actual: " + new java.io.File(".").getAbsolutePath());
 
         try {
-            List<Ciclo> ciclos = Reader.leerFichero(ruta);
+            List<Ciclo> ciclos = Reader.INSTANCIA.leerFichero(ruta);
 
             System.out.println();
             System.out.println("Ciclos leidos: " + ciclos.size());
