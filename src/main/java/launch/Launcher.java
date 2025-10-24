@@ -1,7 +1,6 @@
 package launch;
 
 import java.io.*;
-import java.nio.file.*;
 import java.util.List;
 
 import controlador.Controlador;
@@ -48,17 +47,17 @@ public class Launcher {
             for (File file : files) {
                 
                 List<Ciclo> lista = Reader.INSTANCIA.leerFichero(file.getAbsolutePath());
-                List<Diagnostico> diagnosticos = Controlador.INSTANCIA.generarDiagnostico(lista);
+                List<Diagnostico> diagnosticos = Controlador.INSTANCE.generarDiagnostico(lista);
 
                 // Crear fichero de salida individual
                 File outFile = new File(outDir, file.getName().replace(".txt", ".salida.txt"));
                 try (BufferedWriter writer = new BufferedWriter(new FileWriter(outFile))) {
 
                     if (diagnosticos.isEmpty()) {
-                        writer.write("El paciente no tiene ningún diagnóstico.\n");
-                        globalWriter.write(file.getName() + ": sin diagnósticos.\n");
+                        writer.write("El paciente no tiene ningï¿½n diagnï¿½stico.\n");
+                        globalWriter.write(file.getName() + ": sin diagnï¿½sticos.\n");
                     } else {
-                        writer.write("Diagnósticos del paciente:\n");
+                        writer.write("Diagnï¿½sticos del paciente:\n");
                         for (Diagnostico d : diagnosticos) {
                             writer.write("- " + d.getTipo() + "\n");
                             globalWriter.write(file.getName() + ": " + d.getTipo() + "\n");
@@ -66,7 +65,7 @@ public class Launcher {
                     }
 
                     writer.flush();
-                    globalWriter.flush(); // también escribir al archivo global al mismo tiempo
+                    globalWriter.flush(); // tambiï¿½n escribir al archivo global al mismo tiempo
                 }
             }
 

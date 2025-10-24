@@ -1,10 +1,8 @@
 package elem;
-import java.util.ArrayList;
 import componentes.*;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Optional;
-import componentes.*;
 
 public class Ciclo {
 	
