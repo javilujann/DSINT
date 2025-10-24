@@ -1,24 +1,25 @@
 package elem;
 
-import java.util.Collection;
+import java.util.List;
+import componentes.Onda;
 
 public class ECG {
 	
-	private Collection<Ciclo> ciclos;
+	private List<Ciclo> ciclos;
 	private int frecuenciaCardiaca;
 	
 	
 
-	public ECG(Collection<Ciclo> ciclos) {
+	public ECG(List<Ciclo> ciclos) {
 		super();
 		this.ciclos = ciclos;
 	}
 
-	public Collection<Ciclo> getCiclos() {
+	public List<Ciclo> getCiclos() {
 		return ciclos;
 	}
 
-	public void setCiclos(Collection<Ciclo> ciclos) {
+	public void setCiclos(List<Ciclo> ciclos) {
 		this.ciclos = ciclos;
 	}
 		
@@ -31,8 +32,8 @@ public class ECG {
 		this.frecuenciaCardiaca = frecuenciaCardiaca;
 	}
 	
-	public float getFin() {
-		return 0;
+	public Float getFin() {
+		return ciclos.get(ciclos.size() - 1).getOndas().stream().map(Onda::getFin).max(Float::compareTo).get();
 	}
 	
 }
