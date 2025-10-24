@@ -36,7 +36,8 @@ public class Launcher {
 
             // Listar archivos del directorio de entrada
             File dir = new File(inputDir);
-            File[] files = dir.listFiles(File::isFile);
+            File[] files = dir.listFiles(f -> f.isFile() && f.getName().endsWith(".ecg"));
+
 
             if (files == null || files.length == 0) {
                 System.out.println("No se encontraron archivos en el directorio de entrada: " + inputDir);
@@ -45,8 +46,9 @@ public class Launcher {
 
             // Procesar cada archivo
             for (File file : files) {
-                
-                List<Ciclo> lista = Reader.INSTANCIA.leerFichero(file.getAbsolutePath());
+            	
+            	
+            	List<Ciclo> lista = Reader.INSTANCIA.leerFichero(file.getAbsolutePath());
                 List<Diagnostico> diagnosticos = Controlador.INSTANCE.generarDiagnostico(lista);
 
                 // Crear fichero de salida individual
