@@ -46,6 +46,16 @@ public class PatronPatologico {
 	public void setSugiereDiagnostico(Diagnostico sugiereDiagnostico) {
 		this.sugiereDiagnostico = sugiereDiagnostico;
 	}
+
+
+	public TipoPatron getTipo() {
+		return tipo;
+	}
+
+
+	public void setTipo(TipoPatron tipo) {
+		this.tipo = tipo;
+	}
 	
 	
 	
