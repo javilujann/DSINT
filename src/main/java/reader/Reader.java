@@ -22,7 +22,7 @@ public class Reader {
             while ((linea = br.readLine()) != null) {
                 linea = linea.trim();
 
-                // Ignorar l�neas vac�as o de cabecera
+                // Ignorar líneas vacías o de cabecera
                 if (linea.isEmpty() || linea.startsWith("#")) {
                     continue;
                 }
@@ -48,7 +48,7 @@ public class Reader {
                 }
             }
 
-            // Si queda un ciclo incompleto, se a�ade igualmente
+            // Si queda un ciclo incompleto, se añade igualmente
             if (!cicloActual.getOndas().isEmpty()) {
                 ciclos.add(cicloActual);
             }
@@ -57,7 +57,7 @@ public class Reader {
         return ciclos;
     }
     
-    // M�todo para probar que funciona el Lector
+    // Método para probar que funciona el Lector
     public static void main(String[] args) {
         // Asegurar que la consola use UTF-8
         System.setProperty("file.encoding", "UTF-8");
