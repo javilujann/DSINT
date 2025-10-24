@@ -2,70 +2,57 @@ package elem;
 import java.util.ArrayList;
 import componentes.*;
 import java.util.Collection;
-
-import componentes.ComplejoQRS;
-import componentes.Componente;
-import componentes.IntervaloPR;
-import componentes.Onda;
+import java.util.Optional;
+import componentes.*;
 
 public class Ciclo {
 	
-	private int nciclo;
+	//ATRIBUTOS 
 	private Collection<Onda> ondas;
-	private ComplejoQRS complejo;
-	private IntervaloPR intervaloPR;
-	private IntervaloQT intervaloQT;
-	private IntervaloRR intervaloRR;
-	private SegmentoPR segmentoPR;
-	private SegmentoST segmentoST;
-	
-	
-	
+   
+	private Intervalo intervaloPR;
+    private Intervalo intervaloQT;
+    public Intervalo intervaloRR;
+    
+    private ComplejoQRS complejoQRS;
 
-	public Ciclo(Collection<Onda> ondas) {
+    private Segmento segmentoPR;
+    private Segmento segmentoST;
+    
+    private int indice;
+    
+    // CONSTRUCTOR
+    public Ciclo(Collection<Onda> ondas) {
 		super();
 		this.ondas = ondas;
 	}
-
-	public Ciclo(int nciclo) {
-		// TODO Auto-generated constructor stub
-		this.nciclo = nciclo;
-		this.ondas = new ArrayList<Onda>();
-	}
 	
-	
-
-
-	public int getNciclo() {
-		return nciclo;
-	}
-
-	public void setNciclo(int nciclo) {
-		this.nciclo = nciclo;
-	}
-
-	public Collection<Onda> getOndas() {
+    
+    //GETTERS AND SETTER
+    
+    public Collection<Onda> getOndas() {
 		return ondas;
 	}
 
 	public void setOndas(Collection<Onda> ondas) {
 		this.ondas = ondas;
 	}
-
-	public ComplejoQRS getComplejo() {
-		return complejo;
-	}
-
-	public void setComplejo(ComplejoQRS complejo) {
-		this.complejo = complejo;
-	}
-
-	public IntervaloPR getIntervaloPR() {
+	
+		//INTERVALOS
+	public Intervalo getIntervaloPR() {
 		return intervaloPR;
 	}
 
-	public void setIntervaloPR(IntervaloPR intervaloPR) {
+	public void setIntervaloPR(Intervalo intervaloPR) {
 		this.intervaloPR = intervaloPR;
+	}
+
+	public Intervalo getIntervaloQT() {
+		return intervaloQT;
+	}
+
+	public void setIntervaloQT(Intervalo intervaloQT) {
+		this.intervaloQT = intervaloQT;
 	}
 
 	public IntervaloQT getIntervaloQT() {
@@ -102,7 +89,53 @@ public class Ciclo {
 	
 	
 	
-	
-	
+	public Intervalo getIntervaloRR() {
+		return intervaloRR;
+	}
 
+	public void setIntervaloRR(Intervalo intervaloRR) {
+		this.intervaloRR = intervaloRR;
+	}
+	
+		//SEGMENTO
+
+	public Segmento getSegmentoST() {
+		return segmentoST;
+	}
+
+	public void setSegmentoST(Segmento segmentoST) {
+		this.segmentoST = segmentoST;
+	}
+
+	public Segmento getSegmentoPR() {
+		return segmentoPR;
+	}
+
+	public void setSegmentoPR(Segmento segmentoPR) {
+		this.segmentoPR = segmentoPR;
+	}
+	
+		//COMPLEJO
+	public ComplejoQRS getComplejoQRS() {
+		return complejoQRS;
+	}
+
+	public void setComplejoQRS(ComplejoQRS complejoQRS) {
+		this.complejoQRS = complejoQRS;
+	}
+	
+	
+	// METODOS
+	public Optional<Onda> getOnda(OndaTipo tipo){
+		return ondas.stream().filter(o -> o.getTipo().equals(tipo)).findAny();
+	}
+
+	public int getIndice() {
+		return indice;
+	}
+
+	public void setIndice(int indice) {
+		this.indice = indice;
+	}
+	
 }

@@ -1,0 +1,164 @@
+//created on: Oct 23, 2025
+package rule
+
+//list any import classes here.
+import elem.Ciclo
+import elem.ECG
+import componentes.*
+
+
+//declare any global variables here
+
+
+
+rule "Creacion de Intervalo PR"
+	agenda-group "Creación de complejos"
+
+    when
+      $ciclo : Ciclo(
+      	intervaloPR == null,
+      	getOnda(OndaTipo.P).isPresent(),
+        getOnda(OndaTipo.Q).isPresent()
+      ) 
+    then
+        Onda ondaP = $ciclo.getOnda(OndaTipo.P).get();
+        Onda ondaQ = $ciclo.getOnda(OndaTipo.Q).get();
+        
+        float _inicio = ondaP.getInicio();
+        float _final = ondaQ.getInicio();
+        Intervalo intervalo = new Intervalo(_inicio, _final,IntervaloTipo.PR);
+    	
+        modify($ciclo){
+        	setIntervaloPR(intervalo);
+        }
+end
+
+rule "Creacion de Segmento PR"
+	agenda-group "Creación de complejos"
+
+    when
+      $ciclo : Ciclo(
+      	segmentoPR == null,
+      	getOnda(OndaTipo.P).isPresent(),
+        getOnda(OndaTipo.Q).isPresent()
+      ) 
+    then
+        Onda ondaP = $ciclo.getOnda(OndaTipo.P).get();
+        Onda ondaQ = $ciclo.getOnda(OndaTipo.Q).get();
+        
+        float _inicio = ondaP.getFin();
+        float _final = ondaQ.getInicio();
+        Segmento segmento = new Segmento(_inicio, _final, SegmentoTipo.PR);
+    	
+        modify($ciclo){
+        	setSegmentoPR(segmento);
+        }
+end
+
+rule "Creacion de ComplejoQRS"
+	agenda-group "Creación de complejos"
+
+    when
+      $ciclo : Ciclo(
+      	segmentoPR == null,
+      	getOnda(OndaTipo.S).isPresent(),
+        getOnda(OndaTipo.Q).isPresent()
+      ) 
+    then
+        Onda ondaS = $ciclo.getOnda(OndaTipo.S).get();
+        Onda ondaQ = $ciclo.getOnda(OndaTipo.Q).get();
+        
+        float _inicio = ondaQ.getInicio();
+        float _final = ondaS.getFin();
+        ComplejoQRS complejo = new ComplejoQRS(_inicio, _final);
+    	
+        modify($ciclo){
+        	setComplejoQRS(complejo);
+        }
+end
+
+rule "Creacion de Segmento ST"
+	agenda-group "Creación de complejos"
+
+    when
+      $ciclo : Ciclo(
+      	segmentoST == null,
+      	getOnda(OndaTipo.S).isPresent(),
+        getOnda(OndaTipo.T).isPresent()
+      ) 
+    then
+        Onda ondaS = $ciclo.getOnda(OndaTipo.S).get();
+        Onda ondaT = $ciclo.getOnda(OndaTipo.T).get();
+        
+        float _inicio = ondaS.getFin();
+        float _final = ondaT.getInicio();
+        Segmento segmento = new Segmento(_inicio, _final,SegmentoTipo.ST);
+    	
+        modify($ciclo){
+        	setSegmentoST(segmento);
+        }
+end
+
+rule "Creacion de Intervalo QT"
+	agenda-group "Creación de complejos"
+
+    when
+      $ciclo : Ciclo(
+      	intervaloPR == null,
+      	getOnda(OndaTipo.T).isPresent(),
+        getOnda(OndaTipo.Q).isPresent()
+      ) 
+    then
+        Onda ondaT = $ciclo.getOnda(OndaTipo.T).get();
+        Onda ondaQ = $ciclo.getOnda(OndaTipo.Q).get();
+        
+        float _inicio = ondaQ.getInicio();
+        float _final = ondaT.getFin();
+        Intervalo intervalo = new Intervalo(_inicio, _final,IntervaloTipo.QT);
+    	
+        modify($ciclo){
+        	setIntervaloQT(intervalo);
+        }
+end
+
+rule "Calcular Frecuencia Cardiaca"
+	agenda-group "Creación de complejos"
+	
+	when 
+		$ECG : ECG()
+	then 
+		int numeroCiclos = $ECG.getCiclos().size();
+		float frecuencia = (numeroCiclos * 60 * 1000) / $ECG.getFin();
+		modify($ECG){
+			setFrecuenciaCardiaca((int)frecuencia)
+		}
+end
+
+rule "Calcular Intervalo RR"
+    when
+        $ciclo1 : Ciclo(
+            $indice : indice,
+            getOnda(OndaTipo.R).isPresent()
+        )
+        $ciclo2 : Ciclo(
+            indice == ($indice + 1),
+            intervaloRR == null,
+            getOnda(OndaTipo.R).isPresent()
+        )
+    then
+        Onda ondaR1 = $ciclo1.getOnda(OndaTipo.R).get();
+        Onda ondaR2 = $ciclo2.getOnda(OndaTipo.R).get();
+        
+        // Calcular punto medio de cada onda R
+        float inicio = (ondaR1.getInicio() + ondaR1.getFin()) / 2;
+        float fin = (ondaR2.getInicio() + ondaR2.getFin()) / 2;
+        
+        Intervalo intervalo = new Intervalo(inicio,fin,IntervaloTipo.RR);
+        modify($ciclo2){
+        	setIntervaloRR(intervalo);
+       }
+end
+
+
+
+
