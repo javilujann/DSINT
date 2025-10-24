@@ -109,4 +109,32 @@ public class Ciclo {
 		this.indice = indice;
 	}
 	
+	@Override
+	public String toString() {
+	    StringBuilder sb = new StringBuilder();
+	    sb.append("Ciclo {\n");
+	    sb.append("  indice = ").append(indice).append(",\n");
+	    sb.append("  intervaloPR = ").append(intervaloPR != null ? intervaloPR : "null").append(",\n");
+	    sb.append("  intervaloQT = ").append(intervaloQT != null ? intervaloQT : "null").append(",\n");
+	    sb.append("  intervaloRR = ").append(intervaloRR != null ? intervaloRR : "null").append(",\n");
+	    sb.append("  complejoQRS = ").append(complejoQRS != null ? complejoQRS : "null").append(",\n");
+	    sb.append("  segmentoPR = ").append(segmentoPR != null ? segmentoPR : "null").append(",\n");
+	    sb.append("  segmentoST = ").append(segmentoST != null ? segmentoST : "null").append(",\n");
+
+	    sb.append("  ondas = ");
+	    if (ondas != null && !ondas.isEmpty()) {
+	        sb.append("[\n");
+	        for (Onda o : ondas) {
+	            sb.append("    ").append(o).append(",\n");
+	        }
+	        sb.append("  ]");
+	    } else {
+	        sb.append("[]");
+	    }
+	    sb.append("\n}");
+
+	    return sb.toString();
+	}
+
+	
 }
