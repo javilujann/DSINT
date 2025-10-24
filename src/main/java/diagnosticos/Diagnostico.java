@@ -17,6 +17,18 @@ public class Diagnostico {
 		this.tipo = tipo;
 		this.severidad = severidad;
 	}
+
+
+	public TipoDiagnostico getTipo() {
+		return tipo;
+	}
+
+
+	public void setTipo(TipoDiagnostico tipo) {
+		this.tipo = tipo;
+	}
+	
+	
 	
 	
 
