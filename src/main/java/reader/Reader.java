@@ -6,7 +6,9 @@ import java.util.regex.*;
 import componentes.*;  // Para acceder a Onda, OndaTipo, Ciclo, etc.
 import elem.Ciclo;
 
-public class Reader {
+public enum Reader {
+	
+	INSTANCIA;
 
     // Regex: tipo (P,Q,R,S,T), start, end, peak (con signo y decimal opcional)
     private static final Pattern PATRON_ONDA =
