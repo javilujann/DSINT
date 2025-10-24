@@ -6,6 +6,8 @@ public class Onda extends Componente {
 	private OndaTipo tipo;
 	private float amplitud;
 	
+	
+
 	public Onda(float amplitud, float inicio, float fin, OndaTipo tipo) {
 		super(inicio, fin);
 		this.amplitud = amplitud;

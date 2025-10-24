@@ -1,4 +1,6 @@
 package elem;
+import java.util.ArrayList;
+import componentes.*;
 import java.util.Collection;
 import java.util.Optional;
 import componentes.*;
@@ -52,6 +54,40 @@ public class Ciclo {
 	public void setIntervaloQT(Intervalo intervaloQT) {
 		this.intervaloQT = intervaloQT;
 	}
+
+	public IntervaloQT getIntervaloQT() {
+		return intervaloQT;
+	}
+
+	public void setIntervaloQT(IntervaloQT intervaloQT) {
+		this.intervaloQT = intervaloQT;
+	}
+
+	public IntervaloRR getIntervaloRR() {
+		return intervaloRR;
+	}
+
+	public void setIntervaloRR(IntervaloRR intervaloRR) {
+		this.intervaloRR = intervaloRR;
+	}
+
+	public SegmentoPR getSegmentoPR() {
+		return segmentoPR;
+	}
+
+	public void setSegmentoPR(SegmentoPR segmentoPR) {
+		this.segmentoPR = segmentoPR;
+	}
+
+	public SegmentoST getSegmentoST() {
+		return segmentoST;
+	}
+
+	public void setSegmentoST(SegmentoST segmentoST) {
+		this.segmentoST = segmentoST;
+	}
+	
+	
 	
 	public Intervalo getIntervaloRR() {
 		return intervaloRR;
