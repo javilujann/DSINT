@@ -10,6 +10,7 @@ import componentes.Onda;
 
 public class Ciclo {
 	
+	private int nciclo;
 	private Collection<Onda> ondas;
 	private ComplejoQRS complejo;
 	private IntervaloPR intervaloPR;
@@ -26,12 +27,22 @@ public class Ciclo {
 		this.ondas = ondas;
 	}
 
-	public Ciclo() {
+	public Ciclo(int nciclo) {
 		// TODO Auto-generated constructor stub
+		this.nciclo = nciclo;
 		this.ondas = new ArrayList<Onda>();
 	}
+	
+	
 
 
+	public int getNciclo() {
+		return nciclo;
+	}
+
+	public void setNciclo(int nciclo) {
+		this.nciclo = nciclo;
+	}
 
 	public Collection<Onda> getOndas() {
 		return ondas;
