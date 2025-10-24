@@ -60,7 +60,7 @@ rule "Creacion de ComplejoQRS"
 
     when
       $ciclo : Ciclo(
-      	segmentoPR == null,
+      	complejoQRS == null,
       	getOnda(OndaTipo.S).isPresent(),
         getOnda(OndaTipo.Q).isPresent()
       ) 
@@ -104,7 +104,7 @@ rule "Creacion de Intervalo QT"
 
     when
       $ciclo : Ciclo(
-      	intervaloPR == null,
+      	intervaloQT == null,
       	getOnda(OndaTipo.T).isPresent(),
         getOnda(OndaTipo.Q).isPresent()
       ) 
