@@ -1,6 +1,10 @@
 # Compiled class files
 *.class
 
+# I/O Files
+entrada/
+salida/
+
 # Log files
 *.log
 
