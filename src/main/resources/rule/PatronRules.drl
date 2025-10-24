@@ -1,0 +1,31 @@
+//created on: Oct 24, 2025
+package rule
+
+//list any import classes here.
+import elem.ECG
+import diagnosticos.*
+
+
+//declare any global variables here
+
+
+
+rule "Frecuencia cardiaca alta"
+	agenda-group "Reglas_Patrones"
+	
+    when 
+		$ECG : ECG(frecuenciaCardiaca >= 100)
+	then 
+		PatronPatologico p = new PatronPatologico(Severidad.ALTA,null,TipoPatron.FRECUENCIA_CARDIACA_ALTA);
+		insert(p);
+end
+
+rule "Frecuencia cardiaca baja"
+	agenda-group "Reglas_Patrones"
+	
+    when 
+		$ECG : ECG(frecuenciaCardiaca <= 60)
+	then 
+		PatronPatologico p = new PatronPatologico(Severidad.ALTA,null,TipoPatron.FRECUENCIA_CARDIACA_BAJA);
+		insert(p);
+end

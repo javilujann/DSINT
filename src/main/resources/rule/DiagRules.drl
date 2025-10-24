@@ -1,0 +1,31 @@
+//created on: Oct 24, 2025
+package rule
+
+//list any import classes here.
+import elem.ECG
+import diagnosticos.*
+
+
+//declare any global variables here
+
+
+
+rule "Taquicardia"
+	agenda-group "Reglas_Diagnosticos"
+	
+    when 
+		$Patron : PatronPatologico(tipo == TipoPatron.FRECUENCIA_CARDIACA_ALTA)
+	then 
+		Diagnostico d = new Diagnostico(1,$Patron,TipoDiagnostico.TAQUICARDIA,$Patron.getSeveridad());
+		insert(d);
+end
+
+rule "Bradicardia"
+	agenda-group "Reglas_Diagnosticos"
+	
+    when 
+		$Patron : PatronPatologico(tipo == TipoPatron.FRECUENCIA_CARDIACA_BAJA)
+	then 
+		Diagnostico d = new Diagnostico(1,$Patron,TipoDiagnostico.BRADICARDIA,$Patron.getSeveridad());
+		insert(d);
+end
