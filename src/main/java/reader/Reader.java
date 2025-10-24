@@ -22,7 +22,7 @@ public class Reader {
             while ((linea = br.readLine()) != null) {
                 linea = linea.trim();
 
-                // Ignorar líneas vacías o de cabecera
+                // Ignorar lï¿½neas vacï¿½as o de cabecera
                 if (linea.isEmpty() || linea.startsWith("#")) {
                     continue;
                 }
@@ -37,7 +37,7 @@ public class Reader {
 
                     // Crear la onda
                     Onda onda = new Onda(peak, start, end, tipo);
-                    cicloActual.getOndas().add(onda);
+                    cicloActual.addOnda(onda);
 
                     // Si llega una onda T, se cierra el ciclo
                     if (tipo == OndaTipo.T) {
@@ -48,7 +48,7 @@ public class Reader {
                 }
             }
 
-            // Si queda un ciclo incompleto, se añade igualmente
+            // Si queda un ciclo incompleto, se aï¿½ade igualmente
             if (!cicloActual.getOndas().isEmpty()) {
                 ciclos.add(cicloActual);
             }
@@ -57,7 +57,7 @@ public class Reader {
         return ciclos;
     }
     
-    // Método para probar que funciona el Lector
+    // Mï¿½todo para probar que funciona el Lector
     public static void main(String[] args) {
         // Asegurar que la consola use UTF-8
         System.setProperty("file.encoding", "UTF-8");
@@ -75,7 +75,7 @@ public class Reader {
 
             for (int i = 0; i < ciclos.size(); i++) {
                 Ciclo ciclo = ciclos.get(i);
-                System.out.println("Ciclo " + ciclo.getNciclo() + ": contiene " + ciclo.getOndas().size() + " ondas");
+                System.out.println("Ciclo " + ciclo.getIndice() + ": contiene " + ciclo.getOndas().size() + " ondas");
 
                 for (Componente comp : ciclo.getOndas()) {
                     if (comp instanceof Onda) {

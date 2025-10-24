@@ -2,6 +2,7 @@ package elem;
 import java.util.ArrayList;
 import componentes.*;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.Optional;
 import componentes.*;
 
@@ -22,12 +23,13 @@ public class Ciclo {
     private int indice;
     
     // CONSTRUCTOR
-    public Ciclo(Collection<Onda> ondas) {
+    
+    public Ciclo(int indice) {
 		super();
-		this.ondas = ondas;
+		this.indice = indice;
+		this.ondas = new LinkedList<Onda>();
 	}
 	
-    
     //GETTERS AND SETTER
     
     public Collection<Onda> getOndas() {
@@ -36,6 +38,10 @@ public class Ciclo {
 
 	public void setOndas(Collection<Onda> ondas) {
 		this.ondas = ondas;
+	}
+	
+	public void addOnda(Onda onda) {
+		ondas.add(onda);
 	}
 	
 		//INTERVALOS
@@ -55,40 +61,7 @@ public class Ciclo {
 		this.intervaloQT = intervaloQT;
 	}
 
-	public IntervaloQT getIntervaloQT() {
-		return intervaloQT;
-	}
-
-	public void setIntervaloQT(IntervaloQT intervaloQT) {
-		this.intervaloQT = intervaloQT;
-	}
-
-	public IntervaloRR getIntervaloRR() {
-		return intervaloRR;
-	}
-
-	public void setIntervaloRR(IntervaloRR intervaloRR) {
-		this.intervaloRR = intervaloRR;
-	}
-
-	public SegmentoPR getSegmentoPR() {
-		return segmentoPR;
-	}
-
-	public void setSegmentoPR(SegmentoPR segmentoPR) {
-		this.segmentoPR = segmentoPR;
-	}
-
-	public SegmentoST getSegmentoST() {
-		return segmentoST;
-	}
-
-	public void setSegmentoST(SegmentoST segmentoST) {
-		this.segmentoST = segmentoST;
-	}
-	
-	
-	
+		
 	public Intervalo getIntervaloRR() {
 		return intervaloRR;
 	}
