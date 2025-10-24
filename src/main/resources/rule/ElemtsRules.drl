@@ -3,6 +3,7 @@ package rule
 
 //list any import classes here.
 import elem.Ciclo
+import elem.ECG
 import componentes.*
 
 
@@ -10,8 +11,8 @@ import componentes.*
 
 
 
-
 rule "Creacion de Intervalo PR"
+	agenda-group "Creación de complejos"
 
     when
       $ciclo : Ciclo(
@@ -25,7 +26,7 @@ rule "Creacion de Intervalo PR"
         
         float _inicio = ondaP.getInicio();
         float _final = ondaQ.getInicio();
-        IntervaloPR intervalo = new IntervaloPR(0,_inicio, _final);
+        Intervalo intervalo = new Intervalo(_inicio, _final,IntervaloTipo.PR);
     	
         modify($ciclo){
         	setIntervaloPR(intervalo);
@@ -33,6 +34,7 @@ rule "Creacion de Intervalo PR"
 end
 
 rule "Creacion de Segmento PR"
+	agenda-group "Creación de complejos"
 
     when
       $ciclo : Ciclo(
@@ -46,7 +48,7 @@ rule "Creacion de Segmento PR"
         
         float _inicio = ondaP.getFin();
         float _final = ondaQ.getInicio();
-        SegmentoPR segmento = new SegmentoPR(0,_inicio, _final);
+        Segmento segmento = new Segmento(_inicio, _final, SegmentoTipo.PR);
     	
         modify($ciclo){
         	setSegmentoPR(segmento);
@@ -54,6 +56,7 @@ rule "Creacion de Segmento PR"
 end
 
 rule "Creacion de ComplejoQRS"
+	agenda-group "Creación de complejos"
 
     when
       $ciclo : Ciclo(
@@ -67,7 +70,7 @@ rule "Creacion de ComplejoQRS"
         
         float _inicio = ondaQ.getInicio();
         float _final = ondaS.getFin();
-        ComplejoQRS complejo = new ComplejoQRS(_inicio, _final,0);
+        ComplejoQRS complejo = new ComplejoQRS(_inicio, _final);
     	
         modify($ciclo){
         	setComplejoQRS(complejo);
@@ -75,6 +78,7 @@ rule "Creacion de ComplejoQRS"
 end
 
 rule "Creacion de Segmento ST"
+	agenda-group "Creación de complejos"
 
     when
       $ciclo : Ciclo(
@@ -88,7 +92,7 @@ rule "Creacion de Segmento ST"
         
         float _inicio = ondaS.getFin();
         float _final = ondaT.getInicio();
-        SegmentoST segmento = new SegmentoST(0,_inicio, _final,);
+        Segmento segmento = new Segmento(_inicio, _final,SegmentoTipo.ST);
     	
         modify($ciclo){
         	setSegmentoST(segmento);
@@ -96,6 +100,7 @@ rule "Creacion de Segmento ST"
 end
 
 rule "Creacion de Intervalo QT"
+	agenda-group "Creación de complejos"
 
     when
       $ciclo : Ciclo(
@@ -109,7 +114,7 @@ rule "Creacion de Intervalo QT"
         
         float _inicio = ondaQ.getInicio();
         float _final = ondaT.getFin();
-        IntervaloQT intervalo = new IntervaloQT(0,_inicio, _final);
+        Intervalo intervalo = new Intervalo(_inicio, _final,IntervaloTipo.QT);
     	
         modify($ciclo){
         	setIntervaloQT(intervalo);
@@ -117,15 +122,43 @@ rule "Creacion de Intervalo QT"
 end
 
 rule "Calcular Frecuencia Cardiaca"
+	agenda-group "Creación de complejos"
+	
 	when 
 		$ECG : ECG()
 	then 
-		int numeroCiclos = $ECG.getCiclos();
-		frecuencia = (numeroCiclos * 60) / $ECG.getFin();
+		int numeroCiclos = $ECG.getCiclos().size();
+		float frecuencia = (numeroCiclos * 60 * 1000) / $ECG.getFin();
 		modify($ECG){
-			setFrecuencia(frecuencia)
+			setFrecuenciaCardiaca((int)frecuencia)
 		}
 end
+
+rule "Calcular Intervalo RR"
+    when
+        $ciclo1 : Ciclo(
+            $indice : indice,
+            getOnda(OndaTipo.R).isPresent()
+        )
+        $ciclo2 : Ciclo(
+            indice == ($indice + 1),
+            intervaloRR == null,
+            getOnda(OndaTipo.R).isPresent()
+        )
+    then
+        Onda ondaR1 = $ciclo1.getOnda(OndaTipo.R).get();
+        Onda ondaR2 = $ciclo2.getOnda(OndaTipo.R).get();
+        
+        // Calcular punto medio de cada onda R
+        float inicio = (ondaR1.getInicio() + ondaR1.getFin()) / 2;
+        float fin = (ondaR2.getInicio() + ondaR2.getFin()) / 2;
+        
+        Intervalo intervalo = new Intervalo(inicio,fin,IntervaloTipo.RR);
+        modify($ciclo2){
+        	setIntervaloRR(intervalo);
+       }
+end
+
 
 
 
