@@ -4,23 +4,23 @@ import diagnosticos.PatronPatologico;
 
 public abstract class Componente {
 	
-	private float Amplitud;
 	private float inicio;
 	private float fin;
+	private float duracion;
 	private PatronPatologico patron;
 	
-	public Componente(float amplitud, float inicio, float fin) {
+	public Componente(float inicio, float fin) {
 		super();
-		Amplitud = amplitud;
 		this.inicio = inicio;
 		this.fin = fin;
+		this.duracion = fin - inicio;
 	}
 	
-	public float getAmplitud() {
-		return Amplitud;
+	public float getDuracion() {
+		return duracion;
 	}
-	public void setAmplitud(float amplitud) {
-		Amplitud = amplitud;
+	public void setDuracion(float _duracion) {
+		duracion = _duracion;
 	}
 	public float getInicio() {
 		return inicio;
