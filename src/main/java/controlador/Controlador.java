@@ -17,13 +17,16 @@ public enum Controlador {
 	// load up the knowledge base
     KieServices ks = KieServices.Factory.get();
     KieContainer kContainer = ks.getKieClasspathContainer();
-	KieSession kSession = kContainer.newKieSession("ksession-rules");
+	
 	
 	public List<Diagnostico> generarDiagnostico(List<Ciclo> ciclos){
 		
 		//Creamos la instancia de ECG
 		ECG ecg = new ECG(ciclos);
-			    
+		
+		// Creamos una sesion para este ECG
+		KieSession kSession = kContainer.newKieSession("ksession-rules");
+		
 		// Primera fase: Calculo de componentes + frecuencia
 	    kSession.insert(ecg); 			
 	    ciclos.forEach(kSession::insert);   // Añadimos la evidencia a la base de hehcos
