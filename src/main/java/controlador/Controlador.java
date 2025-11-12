@@ -7,9 +7,8 @@ import org.kie.api.KieServices;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
 
+import componentes.Onda;
 import diagnosticos.Diagnostico;
-import elem.Ciclo;
-import elem.ECG;
 
 public enum Controlador {
 	INSTANCE;
@@ -19,17 +18,13 @@ public enum Controlador {
     KieContainer kContainer = ks.getKieClasspathContainer();
 	
 	
-	public List<Diagnostico> generarDiagnostico(List<Ciclo> ciclos){
-		
-		//Creamos la instancia de ECG
-		ECG ecg = new ECG(ciclos);
+	public List<Diagnostico> generarDiagnostico(List<Onda> ondas){
 		
 		// Creamos una sesion para este ECG
 		KieSession kSession = kContainer.newKieSession("ksession-rules");
 		
-		// Primera fase: Calculo de componentes + frecuencia
-	    kSession.insert(ecg); 			
-	    ciclos.forEach(kSession::insert);   // Añadimos la evidencia a la base de hehcos
+		// Primera fase: Calculo de componentes + frecuencia		
+	    ondas.forEach(kSession::insert);   // Añadimos la evidencia a la base de hehcos
 	    
 	    kSession.getAgenda().getAgendaGroup("Reglas_Componentes").setFocus();
 	    kSession.fireAllRules();

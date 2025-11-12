@@ -3,9 +3,9 @@ package launch;
 import java.io.*;
 import java.util.List;
 
+import componentes.Onda;
 import controlador.Controlador;
 import diagnosticos.Diagnostico;
-import elem.Ciclo;
 import reader.Reader;
 
 public class Launcher {
@@ -48,7 +48,7 @@ public class Launcher {
             for (File file : files) {
             	
             	
-            	List<Ciclo> lista = Reader.INSTANCIA.leerFichero(file.getAbsolutePath());
+            	List<Onda> lista = Reader.INSTANCIA.leerFichero(file.getAbsolutePath());
                 List<Diagnostico> diagnosticos = Controlador.INSTANCE.generarDiagnostico(lista);
 
                 // Crear fichero de salida individual
@@ -56,10 +56,10 @@ public class Launcher {
                 try (BufferedWriter writer = new BufferedWriter(new FileWriter(outFile))) {
 
                     if (diagnosticos.isEmpty()) {
-                        writer.write("El paciente no tiene ning�n diagn�stico.\n");
-                        globalWriter.write(file.getName() + ": sin diagn�sticos.\n");
+                        writer.write("El paciente no tiene ningún diagnóstico.\n");
+                        globalWriter.write(file.getName() + ": sin diagnósticos.\n");
                     } else {
-                        writer.write("Diagn�sticos del paciente:\n");
+                        writer.write("Diagnósticos del paciente:\n");
                         for (Diagnostico d : diagnosticos) {
                             writer.write("- " + d.getTipo() + "\n");
                             globalWriter.write(file.getName() + ": " + d.getTipo() + "\n");

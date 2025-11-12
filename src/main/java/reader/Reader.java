@@ -4,7 +4,6 @@ import java.io.*;
 import java.util.*;
 import java.util.regex.*;
 import componentes.*;  // Para acceder a Onda, OndaTipo, Ciclo, etc.
-import elem.Ciclo;
 
 public enum Reader {
 	
@@ -14,10 +13,8 @@ public enum Reader {
     private final Pattern PATRON_ONDA =
             Pattern.compile("([PQRST])\\((\\d+),(\\d+),(-?\\d*\\.?\\d+)\\)");
 
-    public List<Ciclo> leerFichero(String ruta) throws IOException {
-    	int cont = 0;
-        List<Ciclo> ciclos = new ArrayList<>();
-        Ciclo cicloActual = new Ciclo(cont);
+    public List<Onda> leerFichero(String ruta) throws IOException {
+        List<Onda> ondas = new ArrayList<>();
 
         try (BufferedReader br = new BufferedReader(new FileReader(ruta))) {
             String linea;
@@ -39,24 +36,12 @@ public enum Reader {
 
                     // Crear la onda
                     Onda onda = new Onda(peak, start, end, tipo);
-                    cicloActual.addOnda(onda);
-
-                    // Si llega una onda T, se cierra el ciclo
-                    if (tipo == OndaTipo.T) {
-                    	cont ++;
-                        ciclos.add(cicloActual);
-                        cicloActual = new Ciclo(cont);
-                    }
+                    ondas.add(onda);
                 }
-            }
-
-            // Si queda un ciclo incompleto, se añade igualmente
-            if (!cicloActual.getOndas().isEmpty()) {
-                ciclos.add(cicloActual);
             }
         }
 
-        return ciclos;
+        return ondas;
     }
     
     // Método para probar que funciona el Lector
@@ -64,31 +49,23 @@ public enum Reader {
         // Asegurar que la consola use UTF-8
         System.setProperty("file.encoding", "UTF-8");
 
-        String ruta = "bradicardia2.ecg"; // Cambia por tu ruta si es necesario
+        String ruta = "./entrada/bradicardia2.ecg"; // Cambia por tu ruta si es necesario
         System.out.println("Leyendo archivo: " + ruta);
         System.out.println("Directorio actual: " + new java.io.File(".").getAbsolutePath());
 
         try {
-            List<Ciclo> ciclos = Reader.INSTANCIA.leerFichero(ruta);
+            List<Onda> ondas = Reader.INSTANCIA.leerFichero(ruta);
 
             System.out.println();
-            System.out.println("Ciclos leidos: " + ciclos.size());
+            System.out.println("Ondas leidos: " + ondas.size());
             System.out.println("--------------------------------------------");
 
-            for (int i = 0; i < ciclos.size(); i++) {
-                Ciclo ciclo = ciclos.get(i);
-                System.out.println("Ciclo " + ciclo.getIndice() + ": contiene " + ciclo.getOndas().size() + " ondas");
-
-                for (Componente comp : ciclo.getOndas()) {
-                    if (comp instanceof Onda) {
-                        Onda o = (Onda) comp;
-                        System.out.printf("   %s -> start=%.0f, end=%.0f, peak=%.16f%n",
-                                o.getTipo(), o.getInicio(), o.getFin(), o.getAmplitud());
-                    }
+            for (int i = 0; i < ondas.size(); i++) {
+            	Onda onda = ondas.get(i); 
+                System.out.printf("   %s -> start=%.0f, end=%.0f, peak=%.16f%n",onda.getTipo(), onda.getInicio(), onda.getFin(), onda.getAmplitud());
                 }
 
                 System.out.println("--------------------------------------------");
-            }
 
         } catch (FileNotFoundException e) {
             System.err.println("No se encontro el archivo: " + ruta);
