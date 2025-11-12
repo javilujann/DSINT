@@ -1,0 +1,98 @@
+//created on: Nov 12, 2025
+package rule
+
+import elem.Ciclo
+import elem.ECG
+import componentes.*
+
+import static componentes.OndaTipo.*;
+
+
+// Hecho global para llevar la cuenta de los IDs de los ciclos
+// Es más limpio que un "hecho contador" que se modifica.
+global java.util.concurrent.atomic.AtomicInteger cycleIdCounter;
+
+// ---
+// Regla 1: Identificar el inicio de un nuevo ciclo (Onda P)
+// ---
+// Esta regla busca una Onda P que aún no pertenezca a ningún ciclo.
+// Para asegurarnos de que procesamos los ciclos en orden, añadimos una
+// condición "not": no debe existir OTRA onda P anterior que TAMPOCO
+// tenga ciclo. Esto fuerza a Drools a empezar por la primera P.
+//
+// Usamos "salience" (prioridad) para asegurar que esta regla se
+// evalúe antes que la regla de asignación.
+// ---
+
+rule "1. Crear Nuevo Ciclo en Onda P"
+	agenda-group "Reglas_Ciclos"
+    salience 10 
+when
+    // $p es una Onda de tipo "p" que no tiene ciclo (ciclo == null)
+    $p: Onda(tipo == OndaTipo.P, ciclo == null, $p_inicio: inicio)
+    
+     // Y NO existe otra onda P sin asignar que haya empezado ANTES
+    not Onda(tipo == OndaTipo.P, ciclo == null, inicio < $p_inicio)
+ then
+    // Obtenemos un ID único para el nuevo ciclo
+    int newId = cycleIdCounter.getAndIncrement();
+    
+    // Creamos el nuevo ciclo
+    Ciclo $c = new Ciclo(newId);
+    
+    // Insertamos el nuevo ciclo en la memoria de trabajo
+    insert($c);
+    
+    // Actualizamos la Onda P para que apunte a su nuevo ciclo
+    // "modify" le dice a Drools que este hecho ha cambiado
+    modify($p) {
+        setCiclo($c)
+    };
+    
+    // (Opcional) Añadimos la onda P a la lista del ciclo
+    modify($c) {
+        addOnda($p)
+    };
+end
+
+
+// ---
+// Regla 2: Asignar Ondas (Q, R, S, T) al Ciclo correspondiente
+// ---
+// Esta regla busca ondas Q, R, S o T que no tengan ciclo y las
+// asigna al ciclo de la onda P que las precede.
+// ---
+
+rule "2. Asignar Ondas (Q, R, S, T) al Ciclo"
+	agenda-group "Reglas_Ciclos"
+    salience 5
+when
+    // $c es un Ciclo que ya existe en memoria
+    $c: Ciclo()
+
+    // $p es la Onda P que PERTENECE a ese ciclo $c
+    $p: Onda(tipo == OndaTipo.P, ciclo == $c, $p_inicio: inicio)
+    
+    // $onda es una onda (Q, R, S, o T) que NO tiene ciclo
+    // y que empezó DESPUÉS que nuestra onda P
+    $onda: Onda(tipo in (OndaTipo.Q, OndaTipo.R, OndaTipo.S, OndaTipo.T), ciclo == null, inicio > $p_inicio, $onda_inicio: inicio)
+
+    // Condición CLAVE:
+    // NO debe existir OTRA onda P (de un ciclo futuro)
+    // entre nuestra onda P ($p) y la onda que queremos asignar ($onda).
+    not Onda(tipo == OndaTipo.P, inicio > $p_inicio, inicio < $onda_inicio)
+then
+    // Si se cumplen todas las condiciones, esta onda ($onda)
+    // pertenece al ciclo $c.
+    
+    // Actualizamos la onda para que apunte al ciclo
+    modify($onda) {
+        setCiclo($c)
+    };
+    
+    // (Opcional) Añadimos la onda a la lista del ciclo
+    modify($c) {
+        addOnda($onda)
+    };
+
+end
