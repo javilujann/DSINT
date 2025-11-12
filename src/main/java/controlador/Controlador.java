@@ -2,6 +2,7 @@ package controlador;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.kie.api.KieServices;
 import org.kie.api.runtime.KieContainer;
@@ -23,8 +24,15 @@ public enum Controlador {
 		// Creamos una sesion para este ECG
 		KieSession kSession = kContainer.newKieSession("ksession-rules");
 		
+		// 1. Inicializa el contador global de IDs
+		AtomicInteger cycleIdCounter = new AtomicInteger(1);
+		kSession.setGlobal("cycleIdCounter", cycleIdCounter);
+		
 		// Primera fase: Calculo de componentes + frecuencia		
 	    ondas.forEach(kSession::insert);   // Añadimos la evidencia a la base de hehcos
+	    
+	    kSession.getAgenda().getAgendaGroup("Reglas_Ciclos").setFocus();
+	    kSession.fireAllRules();
 	    
 	    kSession.getAgenda().getAgendaGroup("Reglas_Componentes").setFocus();
 	    kSession.fireAllRules();
@@ -43,7 +51,8 @@ public enum Controlador {
 	        .filter(Diagnostico.class::isInstance)
 	        .map(Diagnostico.class::cast)
 	        .toList();
-
+		
+		
 	    kSession.dispose();
 	    return diagnosticos;
 	}
