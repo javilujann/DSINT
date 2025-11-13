@@ -10,25 +10,19 @@ import componentes.*
 //declare any global variables here
 
 
-
 rule "Creacion de Intervalo PR"
 	agenda-group "Reglas_Componentes"
 
     when
-      $ciclo : Ciclo(
-      	intervaloPR == null,
-      	getOnda(OndaTipo.P).isPresent(),
-        getOnda(OndaTipo.Q).isPresent()
-      ) 
-    then
-        Onda ondaP = $ciclo.getOnda(OndaTipo.P).get();
-        Onda ondaQ = $ciclo.getOnda(OndaTipo.Q).get();
-        
-        float _inicio = ondaP.getInicio();
-        float _final = ondaQ.getInicio();
+      $c : Ciclo( intervaloPR == null )
+      $p: Onda(tipo == OndaTipo.P, ciclo == $c)
+      $q: Onda(tipo == OndaTipo.Q, ciclo == $c)
+    then   
+        float _inicio = $p.getInicio();
+        float _final = $q.getInicio();
         Intervalo intervalo = new Intervalo(_inicio, _final,IntervaloTipo.PR);
     	
-        modify($ciclo){
+        modify($c){
         	setIntervaloPR(intervalo);
         }
 end
@@ -37,20 +31,16 @@ rule "Creacion de Segmento PR"
 	agenda-group "Reglas_Componentes"
 
     when
-      $ciclo : Ciclo(
-      	segmentoPR == null,
-      	getOnda(OndaTipo.P).isPresent(),
-        getOnda(OndaTipo.Q).isPresent()
-      ) 
+      $c : Ciclo( segmentoPR == null )
+      $p: Onda(tipo == OndaTipo.P, ciclo == $c)
+      $q: Onda(tipo == OndaTipo.Q, ciclo == $c)
     then
-        Onda ondaP = $ciclo.getOnda(OndaTipo.P).get();
-        Onda ondaQ = $ciclo.getOnda(OndaTipo.Q).get();
         
-        float _inicio = ondaP.getFin();
-        float _final = ondaQ.getInicio();
+        float _inicio = $p.getFin();
+        float _final = $q.getInicio();
         Segmento segmento = new Segmento(_inicio, _final, SegmentoTipo.PR);
     	
-        modify($ciclo){
+        modify($c){
         	setSegmentoPR(segmento);
         }
 end
@@ -59,20 +49,15 @@ rule "Creacion de ComplejoQRS"
 	agenda-group "Reglas_Componentes"
 
     when
-      $ciclo : Ciclo(
-      	complejoQRS == null,
-      	getOnda(OndaTipo.S).isPresent(),
-        getOnda(OndaTipo.Q).isPresent()
-      ) 
-    then
-        Onda ondaS = $ciclo.getOnda(OndaTipo.S).get();
-        Onda ondaQ = $ciclo.getOnda(OndaTipo.Q).get();
-        
-        float _inicio = ondaQ.getInicio();
-        float _final = ondaS.getFin();
+     	$c : Ciclo( complejoQRS == null )
+      	$q: Onda(tipo == OndaTipo.Q, ciclo == $c)
+     	$s: Onda(tipo == OndaTipo.S, ciclo == $c)
+    then 
+        float _inicio = $q.getInicio();
+        float _final = $s.getFin();
         ComplejoQRS complejo = new ComplejoQRS(_inicio, _final);
     	
-        modify($ciclo){
+        modify($c){
         	setComplejoQRS(complejo);
         }
 end
@@ -81,20 +66,15 @@ rule "Creacion de Segmento ST"
 	agenda-group "Reglas_Componentes"
 
     when
-      $ciclo : Ciclo(
-      	segmentoST == null,
-      	getOnda(OndaTipo.S).isPresent(),
-        getOnda(OndaTipo.T).isPresent()
-      ) 
+		$c : Ciclo( segmentoST == null )
+      	$s: Onda(tipo == OndaTipo.S, ciclo == $c)
+      	$t: Onda(tipo == OndaTipo.T, ciclo == $c)
     then
-        Onda ondaS = $ciclo.getOnda(OndaTipo.S).get();
-        Onda ondaT = $ciclo.getOnda(OndaTipo.T).get();
-        
-        float _inicio = ondaS.getFin();
-        float _final = ondaT.getInicio();
+        float _inicio = $s.getFin();
+        float _final = $t.getInicio();
         Segmento segmento = new Segmento(_inicio, _final,SegmentoTipo.ST);
     	
-        modify($ciclo){
+        modify($c){
         	setSegmentoST(segmento);
         }
 end
@@ -103,61 +83,52 @@ rule "Creacion de Intervalo QT"
 	agenda-group "Reglas_Componentes"
 
     when
-      $ciclo : Ciclo(
-      	intervaloQT == null,
-      	getOnda(OndaTipo.T).isPresent(),
-        getOnda(OndaTipo.Q).isPresent()
-      ) 
+		$c : Ciclo( intervaloQT == null )
+      	$q: Onda(tipo == OndaTipo.Q, ciclo == $c)
+      	$t: Onda(tipo == OndaTipo.T, ciclo == $c)
     then
-        Onda ondaT = $ciclo.getOnda(OndaTipo.T).get();
-        Onda ondaQ = $ciclo.getOnda(OndaTipo.Q).get();
-        
-        float _inicio = ondaQ.getInicio();
-        float _final = ondaT.getFin();
+        float _inicio = $q.getInicio();
+        float _final = $t.getFin();
         Intervalo intervalo = new Intervalo(_inicio, _final,IntervaloTipo.QT);
     	
-        modify($ciclo){
+        modify($c){
         	setIntervaloQT(intervalo);
         }
-end
-
-rule "Calcular Frecuencia Cardiaca"
-	agenda-group "Reglas_Componentes"
-	
-	when 
-		$ECG : ECG()
-	then 
-		int numeroCiclos = $ECG.getCiclos().size();
-		float frecuencia = (numeroCiclos * 60 * 1000) / $ECG.getFin();
-		modify($ECG){
-			setFrecuenciaCardiaca((int)frecuencia)
-		}
 end
 
 rule "Calcular Intervalo RR"
 	agenda-group "Reglas_Componentes"
     when
-        $ciclo1 : Ciclo(
-            $indice : indice,
-            getOnda(OndaTipo.R).isPresent()
-        )
-        $ciclo2 : Ciclo(
-            indice == ($indice + 1),
-            intervaloRR == null,
-            getOnda(OndaTipo.R).isPresent()
-        )
+        $c1 : Ciclo( $indice : indice )
+        $r1: Onda(tipo == OndaTipo.R, ciclo == $c1)
+       	$c2 : Ciclo( indice == ($indice + 1), intervaloRR == null)
+		$r2: Onda(tipo == OndaTipo.R, ciclo == $c2)
     then
-        Onda ondaR1 = $ciclo1.getOnda(OndaTipo.R).get();
-        Onda ondaR2 = $ciclo2.getOnda(OndaTipo.R).get();
-        
         // Calcular punto medio de cada onda R
-        float inicio = (ondaR1.getInicio() + ondaR1.getFin()) / 2;
-        float fin = (ondaR2.getInicio() + ondaR2.getFin()) / 2;
+        float inicio = ($r1.getInicio() + $r1.getFin()) / 2;
+        float fin = ($r2.getInicio() + $r2.getFin()) / 2;
         
         Intervalo intervalo = new Intervalo(inicio,fin,IntervaloTipo.RR);
-        modify($ciclo2){
+        modify($c2){
         	setIntervaloRR(intervalo);
        }
+end
+
+
+rule "Calcular Frecuencia Cardiaca"
+	agenda-group "Reglas_Componentes"
+	
+	when 
+		$ECG : ECG(frecuenciaCardiaca == 0, $ciclos : ciclos)
+		$o : Onda($fin : fin)
+		not Onda(fin > $fin)
+		
+	then 
+		int numeroCiclos = $ciclos.size();
+		double frecuencia = (numeroCiclos * 60 * 1000) / (double)$fin;
+		modify($ECG){
+			setFrecuenciaCardiaca((int)frecuencia)
+		}
 end
 
 
