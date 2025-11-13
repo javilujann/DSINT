@@ -10,6 +10,7 @@ import org.kie.api.runtime.KieSession;
 
 import componentes.Onda;
 import diagnosticos.Diagnostico;
+import elem.ECG;
 
 public enum Controlador {
 	INSTANCE;
@@ -21,8 +22,13 @@ public enum Controlador {
 	
 	public List<Diagnostico> generarDiagnostico(List<Onda> ondas){
 		
+		
 		// Creamos una sesion para este ECG
 		KieSession kSession = kContainer.newKieSession("ksession-rules");
+		
+		//Creamos el objeto ECG
+		ECG ecg = new ECG();
+		kSession.insert(ecg);
 		
 		// 1. Inicializa el contador global de IDs
 		AtomicInteger cycleIdCounter = new AtomicInteger(1);
@@ -51,7 +57,7 @@ public enum Controlador {
 	        .filter(Diagnostico.class::isInstance)
 	        .map(Diagnostico.class::cast)
 	        .toList();
-		
+	    
 		
 	    kSession.dispose();
 	    return diagnosticos;

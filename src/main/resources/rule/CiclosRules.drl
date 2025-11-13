@@ -28,6 +28,8 @@ rule "1. Crear Nuevo Ciclo en Onda P"
 	agenda-group "Reglas_Ciclos"
     salience 10 
 when
+	//Obtenemos ECG
+	$ECG: ECG()
     // $p es una Onda de tipo "p" que no tiene ciclo (ciclo == null)
     $p: Onda(tipo == OndaTipo.P, ciclo == null, $p_inicio: inicio)
     
@@ -49,10 +51,15 @@ when
         setCiclo($c)
     };
     
-    // (Opcional) Añadimos la onda P a la lista del ciclo
+    // Añadimos la onda P a la lista del ciclo
     modify($c) {
         addOnda($p)
     };
+    
+    //Añadimos el ciclo a la ECG
+    modify($ECG){
+   		addCiclo($c)
+   };
 end
 
 

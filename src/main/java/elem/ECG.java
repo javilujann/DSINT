@@ -1,7 +1,7 @@
 package elem;
 
+import java.util.LinkedList;
 import java.util.List;
-import componentes.Onda;
 
 public class ECG {
 	
@@ -10,9 +10,10 @@ public class ECG {
 	
 	
 
-	public ECG(List<Ciclo> ciclos) {
+	public ECG() {
 		super();
-		this.ciclos = ciclos;
+		ciclos = new LinkedList<Ciclo>();
+		frecuenciaCardiaca = 0;
 	}
 
 	public List<Ciclo> getCiclos() {
@@ -21,6 +22,10 @@ public class ECG {
 
 	public void setCiclos(List<Ciclo> ciclos) {
 		this.ciclos = ciclos;
+	}
+	
+	public void addCiclo(Ciclo ciclo) {
+		ciclos.add(ciclo);
 	}
 		
 
@@ -32,8 +37,6 @@ public class ECG {
 		this.frecuenciaCardiaca = frecuenciaCardiaca;
 	}
 	
-	public Float getFin() {
-		return ciclos.get(ciclos.size() - 1).getOndas().stream().map(Onda::getFin).max(Float::compareTo).get();
-	}
+	
 	
 }
