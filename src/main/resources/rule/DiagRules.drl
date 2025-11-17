@@ -29,3 +29,44 @@ rule "Bradicardia"
 		Diagnostico d = new Diagnostico(1,$Patron,TipoDiagnostico.BRADICARDIA,$Patron.getSeveridad());
 		insert(d);
 end
+
+rule "Hipocalcemia"
+	agenda-group "Reglas_Diagnosticos"
+	
+    when 
+		$Patron : PatronPatologico(tipo == TipoPatron.INTERVALO_QT_ALARGADO)
+	then 
+		Diagnostico d = new Diagnostico(1,$Patron,TipoDiagnostico.HIPOCALCEMIA,$Patron.getSeveridad());
+		insert(d);
+end
+
+rule "Hipopotasemia"
+	agenda-group "Reglas_Diagnosticos"
+	
+    when 
+		$Patron : PatronPatologico(tipo == TipoPatron.ONDA_T_MUY_APLANADA)
+	then 
+		Diagnostico d = new Diagnostico(1,$Patron,TipoDiagnostico.HIPOPOTASEMIA,$Patron.getSeveridad());
+		insert(d);
+end
+
+rule "Isquemia Coronaria"
+	agenda-group "Reglas_Diagnosticos"
+	
+    when 
+		$Patron : PatronPatologico(tipo == TipoPatron.ONDA_T_APLANADA)
+	then 
+		Diagnostico d = new Diagnostico(1,$Patron,TipoDiagnostico.ISQUEMIA_CORONARIA,$Patron.getSeveridad());
+		insert(d);
+end
+
+rule "Infarto Agudo de Miocardio"
+agenda-group "Reglas_Diagnosticos"
+	
+    when 
+		$Patron : PatronPatologico(tipo == TipoPatron.ONDA_T_HIPERAGUDA)
+	then 
+		Diagnostico d = new Diagnostico(1,$Patron,TipoDiagnostico.INFARTO_AGUDO_DE_MIOCARDIO,$Patron.getSeveridad());
+		insert(d);
+end
+

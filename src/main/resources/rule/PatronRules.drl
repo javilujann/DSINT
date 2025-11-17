@@ -3,7 +3,9 @@ package rule
 
 //list any import classes here.
 import elem.ECG
+import elem.Ciclo
 import diagnosticos.*
+import componentes.*
 
 
 //declare any global variables here
@@ -29,3 +31,42 @@ rule "Frecuencia cardiaca baja"
 		PatronPatologico p = new PatronPatologico(Severidad.ALTA,null,TipoPatron.FRECUENCIA_CARDIACA_BAJA);
 		insert(p);
 end
+
+rule "Intervalo QT alargado"
+	agenda-group "Reglas_Patrones"
+	
+	when
+		$c : Ciclo(intervaloQT != null, intervaloQT.duracion>500)
+		not (PatronPatologico(tipo == TipoPatron.INTERVALO_QT_ALARGADO))
+	then
+		PatronPatologico p = new PatronPatologico(Severidad.ALTA,null,TipoPatron.INTERVALO_QT_ALARGADO);
+		insert(p);
+end
+
+rule "Onda T muy Aplanada"
+when
+    $t : Onda(tipo == OndaTipo.T,amplitud < -14)
+    not  (PatronPatologico(tipo == TipoPatron.ONDA_T_MUY_APLANADA))
+then
+    PatronPatologico p = new PatronPatologico(Severidad.ALTA,null,TipoPatron.ONDA_T_MUY_APLANADA);
+	insert(p);
+end
+
+rule "Onda T Aplanada"
+when
+    $t : Onda(tipo == OndaTipo.T,-14 < amplitud,amplitud < -9)
+    not  (PatronPatologico(tipo == TipoPatron.ONDA_T_APLANADA))
+then
+    PatronPatologico p = new PatronPatologico(Severidad.ALTA,null,TipoPatron.ONDA_T_APLANADA);
+	insert(p);
+end
+
+rule "Onda T Hiperaguda"
+when 
+	$t : Onda(tipo == OndaTipo.T, amplitud > 10)
+	not (PatronPatologico(tipo == TipoPatron.ONDA_T_HIPERAGUDA))
+then 
+	PatronPatologico p = new PatronPatologico(Severidad.ALTA,null,TipoPatron.ONDA_T_HIPERAGUDA);
+	insert(p);
+end
+			
