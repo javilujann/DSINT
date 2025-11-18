@@ -1,12 +1,10 @@
-package launch;
+package main;
 
 import java.io.*;
 import java.util.List;
 
 import componentes.Onda;
-import controlador.Controlador;
 import diagnosticos.Diagnostico;
-import reader.Reader;
 
 public class Launcher {
 
@@ -61,8 +59,8 @@ public class Launcher {
                     } else {
                         writer.write("Diagnósticos del paciente:\n");
                         for (Diagnostico d : diagnosticos) {
-                            writer.write("- " + d.getTipo() + "\n");
-                            globalWriter.write(file.getName() + ": " + d.getTipo() + "\n");
+                            writer.write("- " + d.getClass() + "\n");
+                            globalWriter.write(file.getName() + ": " + d.getClass() + "\n");
                         }
                     }
 

@@ -1,4 +1,4 @@
-package controlador;
+package main;
 
 import java.util.Collection;
 import java.util.List;

@@ -1,4 +1,4 @@
-package reader;
+package main;
 
 import java.io.*;
 import java.util.*;
@@ -12,6 +12,8 @@ public enum Reader {
     // Regex: tipo (P,Q,R,S,T), start, end, peak (con signo y decimal opcional)
     private final Pattern PATRON_ONDA =
             Pattern.compile("([PQRST])\\((\\d+),(\\d+),(-?\\d*\\.?\\d+)\\)");
+    
+    private int contador = 0;
 
     public List<Onda> leerFichero(String ruta) throws IOException {
         List<Onda> ondas = new ArrayList<>();
@@ -28,14 +30,24 @@ public enum Reader {
 
                 Matcher matcher = PATRON_ONDA.matcher(linea);
                 if (matcher.matches()) {
+                	
+                	
                     // Extraer datos
-                    OndaTipo tipo = OndaTipo.valueOf(matcher.group(1)); // usa enum
                     float start = Float.parseFloat(matcher.group(2));
                     float end = Float.parseFloat(matcher.group(3));
                     float peak = Float.parseFloat(matcher.group(4));
 
                     // Crear la onda
-                    Onda onda = new Onda(peak, start, end, tipo);
+                    Onda onda = null;
+                    switch (contador % 5) {
+                    	case 0: onda = new OndaP(peak, start, end); break;
+                    	case 1: onda = new OndaQ(peak, start, end); break;
+                    	case 2: onda = new OndaR(peak, start, end); break;
+                    	case 3: onda = new OndaS(peak, start, end); break;
+                    	case 4: onda = new OndaT(peak, start, end); break;
+                    }
+                    contador++;
+                    
                     ondas.add(onda);
                 }
             }
@@ -62,7 +74,7 @@ public enum Reader {
 
             for (int i = 0; i < ondas.size(); i++) {
             	Onda onda = ondas.get(i); 
-                System.out.printf("   %s -> start=%.0f, end=%.0f, peak=%.16f%n",onda.getTipo(), onda.getInicio(), onda.getFin(), onda.getAmplitud());
+                System.out.printf("   %s -> start=%.0f, end=%.0f, peak=%.16f%n",onda.getClass(), onda.getInicio(), onda.getFin(), onda.getAmplitud());
                 }
 
                 System.out.println("--------------------------------------------");
