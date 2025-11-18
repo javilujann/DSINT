@@ -11,12 +11,11 @@ public abstract class Componente {
 	private PatronPatologico patron;
 	private Ciclo ciclo;
 	
-	public Componente(float inicio, float fin, Ciclo ciclo) {
+	public Componente(float inicio, float fin) {
 		super();
 		this.inicio = inicio;
 		this.fin = fin;
 		this.duracion = fin - inicio;
-		this.ciclo = ciclo;
 	}
 	
 	public float getDuracion() {
