@@ -1,7 +1,7 @@
 package componentes;
 
-import diagnosticos.PatronPatologico;
 import elem.Ciclo;
+import patrones.PatronPatologico;
 
 public abstract class Componente {
 	
