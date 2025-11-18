@@ -1,8 +1,6 @@
 package diagnosticos;
 
 public enum TipoDiagnostico {
-	
-	ALETEO_AURICULAR,
 	BRADICARDIA,
 	CONTRACCION_VENTRICULAR_PREMATURA,
 	HIPOCALCEMIA,
