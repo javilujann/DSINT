@@ -1,91 +1,57 @@
 package elem;
 import componentes.*;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.Optional;
 
 public class Ciclo {
 	
 	//ATRIBUTOS 
-	private Collection<Onda> ondas;
+	private OndaP ondaP;
+	private OndaQ ondaQ;
+	private OndaR ondaR;
+	private OndaS ondaS;
+	private OndaT ondaT;
    
-	private Intervalo intervaloPR;
-    private Intervalo intervaloQT;
-    public Intervalo intervaloRR;
+	private IntervaloPR intervaloPR;
+    private IntervaloQT intervaloQT;
+    public IntervaloRR intervaloRR;
     
     private ComplejoQRS complejoQRS;
 
-    private Segmento segmentoPR;
-    private Segmento segmentoST;
-    
     private int indice;
     
-    // CONSTRUCTOR
-    
+    // CONSTRUCTOR    
     public Ciclo(int indice) {
 		super();
 		this.indice = indice;
-		this.ondas = new LinkedList<Onda>();
 	}
 	
     //GETTERS AND SETTER
     
-    public Collection<Onda> getOndas() {
-		return ondas;
-	}
-
-	public void setOndas(Collection<Onda> ondas) {
-		this.ondas = ondas;
-	}
-	
-	public void addOnda(Onda onda) {
-		ondas.add(onda);
-	}
-	
 		//INTERVALOS
-	public Intervalo getIntervaloPR() {
+	public IntervaloPR getIntervaloPR() {
 		return intervaloPR;
 	}
 
-	public void setIntervaloPR(Intervalo intervaloPR) {
+	public void setIntervaloPR(IntervaloPR intervaloPR) {
 		this.intervaloPR = intervaloPR;
 	}
 
-	public Intervalo getIntervaloQT() {
+	public IntervaloQT getIntervaloQT() {
 		return intervaloQT;
 	}
 
-	public void setIntervaloQT(Intervalo intervaloQT) {
+	public void setIntervaloQT(IntervaloQT intervaloQT) {
 		this.intervaloQT = intervaloQT;
 	}
 
 		
-	public Intervalo getIntervaloRR() {
+	public IntervaloRR getIntervaloRR() {
 		return intervaloRR;
 	}
 
-	public void setIntervaloRR(Intervalo intervaloRR) {
+	public void setIntervaloRR(IntervaloRR intervaloRR) {
 		this.intervaloRR = intervaloRR;
 	}
-	
-		//SEGMENTO
-
-	public Segmento getSegmentoST() {
-		return segmentoST;
-	}
-
-	public void setSegmentoST(Segmento segmentoST) {
-		this.segmentoST = segmentoST;
-	}
-
-	public Segmento getSegmentoPR() {
-		return segmentoPR;
-	}
-
-	public void setSegmentoPR(Segmento segmentoPR) {
-		this.segmentoPR = segmentoPR;
-	}
-	
+		
 		//COMPLEJO
 	public ComplejoQRS getComplejoQRS() {
 		return complejoQRS;
@@ -93,12 +59,6 @@ public class Ciclo {
 
 	public void setComplejoQRS(ComplejoQRS complejoQRS) {
 		this.complejoQRS = complejoQRS;
-	}
-	
-	
-	// METODOS
-	public Optional<Onda> getOnda(OndaTipo tipo){
-		return ondas.stream().filter(o -> o.getTipo().equals(tipo)).findAny();
 	}
 
 	public int getIndice() {
@@ -108,33 +68,45 @@ public class Ciclo {
 	public void setIndice(int indice) {
 		this.indice = indice;
 	}
-	
-	@Override
-	public String toString() {
-	    StringBuilder sb = new StringBuilder();
-	    sb.append("Ciclo {\n");
-	    sb.append("  indice = ").append(indice).append(",\n");
-	    sb.append("  intervaloPR = ").append(intervaloPR != null ? intervaloPR : "null").append(",\n");
-	    sb.append("  intervaloQT = ").append(intervaloQT != null ? intervaloQT : "null").append(",\n");
-	    sb.append("  intervaloRR = ").append(intervaloRR != null ? intervaloRR : "null").append(",\n");
-	    sb.append("  complejoQRS = ").append(complejoQRS != null ? complejoQRS : "null").append(",\n");
-	    sb.append("  segmentoPR = ").append(segmentoPR != null ? segmentoPR : "null").append(",\n");
-	    sb.append("  segmentoST = ").append(segmentoST != null ? segmentoST : "null").append(",\n");
 
-	    sb.append("  ondas = ");
-	    if (ondas != null && !ondas.isEmpty()) {
-	        sb.append("[\n");
-	        for (Onda o : ondas) {
-	            sb.append("    ").append(o).append(",\n");
-	        }
-	        sb.append("  ]");
-	    } else {
-	        sb.append("[]");
-	    }
-	    sb.append("\n}");
-
-	    return sb.toString();
+	public OndaP getOndaP() {
+		return ondaP;
 	}
 
+	public void setOndaP(OndaP ondaP) {
+		this.ondaP = ondaP;
+	}
+
+	public OndaQ getOndaQ() {
+		return ondaQ;
+	}
+
+	public void setOndaQ(OndaQ ondaQ) {
+		this.ondaQ = ondaQ;
+	}
+
+	public OndaR getOndaR() {
+		return ondaR;
+	}
+
+	public void setOndaR(OndaR ondaR) {
+		this.ondaR = ondaR;
+	}
+
+	public OndaS getOndaS() {
+		return ondaS;
+	}
+
+	public void setOndaS(OndaS ondaS) {
+		this.ondaS = ondaS;
+	}
+
+	public OndaT getOndaT() {
+		return ondaT;
+	}
+
+	public void setOndaT(OndaT ondaT) {
+		this.ondaT = ondaT;
+	}
 	
 }
