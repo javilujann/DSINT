@@ -44,29 +44,48 @@ rule "Intervalo QT alargado"
 end
 
 rule "Onda T muy Aplanada"
-when
-    $t : Onda(tipo == OndaTipo.T,amplitud < -14)
-    not  (PatronPatologico(tipo == TipoPatron.ONDA_T_MUY_APLANADA))
-then
-    PatronPatologico p = new PatronPatologico(Severidad.ALTA,null,TipoPatron.ONDA_T_MUY_APLANADA);
-	insert(p);
+agenda-group "Reglas_Patrones"
+	
+
+	when
+    	$t : Onda(tipo == OndaTipo.T,amplitud < -14)
+    	not  (PatronPatologico(tipo == TipoPatron.ONDA_T_MUY_APLANADA))
+	then
+    	PatronPatologico p = new PatronPatologico(Severidad.ALTA,null,TipoPatron.ONDA_T_MUY_APLANADA);
+		insert(p);
 end
 
 rule "Onda T Aplanada"
-when
-    $t : Onda(tipo == OndaTipo.T,-14 < amplitud,amplitud < -9)
-    not  (PatronPatologico(tipo == TipoPatron.ONDA_T_APLANADA))
-then
-    PatronPatologico p = new PatronPatologico(Severidad.ALTA,null,TipoPatron.ONDA_T_APLANADA);
-	insert(p);
-end
+agenda-group "Reglas_Patrones"
+	
+	when
+    	$t : Onda(tipo == OndaTipo.T,-14 < amplitud,amplitud < -9)
+    	not  (PatronPatologico(tipo == TipoPatron.ONDA_T_APLANADA))
+	then
+    	PatronPatologico p = new PatronPatologico(Severidad.ALTA,null,TipoPatron.ONDA_T_APLANADA);
+		insert(p);
+	end
 
 rule "Onda T Hiperaguda"
-when 
-	$t : Onda(tipo == OndaTipo.T, amplitud > 10)
-	not (PatronPatologico(tipo == TipoPatron.ONDA_T_HIPERAGUDA))
-then 
-	PatronPatologico p = new PatronPatologico(Severidad.ALTA,null,TipoPatron.ONDA_T_HIPERAGUDA);
-	insert(p);
+agenda-group "Reglas_Patrones"
+	
+	when 
+		$t : Onda(tipo == OndaTipo.T, amplitud > 10)
+		not (PatronPatologico(tipo == TipoPatron.ONDA_T_HIPERAGUDA))
+	then 
+		PatronPatologico p = new PatronPatologico(Severidad.ALTA,null,TipoPatron.ONDA_T_HIPERAGUDA);
+		insert(p);
 end
+
+rule "Complejo QRS acortado"
+agenda-group "Reglas_Patrones"
+	
+	when
+		$c : Ciclo(complejoQRS != null, complejoQRS.duracion<90)
+		not (PatronPatologico(tipo == TipoPatron.COMPLEJO_QRS_ACORTADO))
+	then 
+		
+		PatronPatologico p = new PatronPatologico(Severidad.ALTA,null,TipoPatron.COMPLEJO_QRS_ACORTADO);
+		insert(p);
+end	
 			

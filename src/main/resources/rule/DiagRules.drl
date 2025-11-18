@@ -70,3 +70,13 @@ agenda-group "Reglas_Diagnosticos"
 		insert(d);
 end
 
+rule "Contracción Ventricular Prematura"
+agenda-group "Reglas_Diagnosticos"
+
+	when
+		$Patron : PatronPatologico(tipo == TipoPatron.COMPLEJO_QRS_ACORTADO)
+	then 
+		Diagnostico d = new Diagnostico(1,$Patron,TipoDiagnostico.CONTRACCION_VENTRICULAR_PREMATURA,$Patron.getSeveridad());
+		insert(d);
+end	
+
