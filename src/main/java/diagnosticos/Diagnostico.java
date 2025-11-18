@@ -7,15 +7,13 @@ public class Diagnostico {
 	private float confianza;
 	private PatronPatologico evidencia;
 	private TipoDiagnostico tipo;
-	private Severidad severidad;
 	
 
-	public Diagnostico(float confianza, PatronPatologico evidencia, TipoDiagnostico tipo, Severidad severidad) {
+	public Diagnostico(float confianza, PatronPatologico evidencia, TipoDiagnostico tipo) {
 		super();
 		this.confianza = confianza;
 		this.evidencia = evidencia;
 		this.tipo = tipo;
-		this.severidad = severidad;
 	}
 
 	
@@ -39,15 +37,6 @@ public class Diagnostico {
 		this.evidencia = evidencia;
 	}
 
-
-	public Severidad getSeveridad() {
-		return severidad;
-	}
-
-
-	public void setSeveridad(Severidad severidad) {
-		this.severidad = severidad;
-	}
 
 	public TipoDiagnostico getTipo() {
 		return tipo;

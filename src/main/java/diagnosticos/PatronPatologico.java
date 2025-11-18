@@ -4,29 +4,18 @@ import componentes.Componente;
 
 public class PatronPatologico {
 	
-	private Severidad severidad;
+	private float confianza;
 	private Componente componenteAfectada;
-	private TipoPatron tipo;
 	private Diagnostico sugiereDiagnostico;
+	private TipoPatron tipo;
 	
 	
-	public PatronPatologico(Severidad severidad, Componente componenteAfectada, TipoPatron tipo) {
+	public PatronPatologico(float confianza,Componente componenteAfectada, TipoPatron tipo) {
 		super();
-		this.severidad = severidad;
+		this.confianza = confianza;
 		this.componenteAfectada = componenteAfectada;
 		this.tipo = tipo;
 	}
-
-
-	public Severidad getSeveridad() {
-		return severidad;
-	}
-
-
-	public void setSeveridad(Severidad severidad) {
-		this.severidad = severidad;
-	}
-
 
 	public Componente getComponenteAfectada() {
 		return componenteAfectada;
@@ -55,6 +44,14 @@ public class PatronPatologico {
 
 	public void setTipo(TipoPatron tipo) {
 		this.tipo = tipo;
+	}
+
+	public float getConfianza() {
+		return confianza;
+	}
+
+	public void setConfianza(float confianza) {
+		this.confianza = confianza;
 	}
 	
 	
