@@ -15,43 +15,27 @@ rule "Creacion de Intervalo PR"
 
     when
       $c : Ciclo( intervaloPR == null )
-      $p: Onda(tipo == OndaTipo.P, ciclo == $c)
-      $q: Onda(tipo == OndaTipo.Q, ciclo == $c)
+      $p: OndaP(ciclo == $c)
+      $q: OndaQ( ciclo == $c)
     then   
         float _inicio = $p.getInicio();
         float _final = $q.getInicio();
-        Intervalo intervalo = new Intervalo(_inicio, _final,IntervaloTipo.PR);
+        IntervaloPR intervalo = new IntervaloPR(_inicio, _final);
     	
         modify($c){
         	setIntervaloPR(intervalo);
         }
+        insert(intervalo);
 end
 
-rule "Creacion de Segmento PR"
-	agenda-group "Reglas_Componentes"
-
-    when
-      $c : Ciclo( segmentoPR == null )
-      $p: Onda(tipo == OndaTipo.P, ciclo == $c)
-      $q: Onda(tipo == OndaTipo.Q, ciclo == $c)
-    then
-        
-        float _inicio = $p.getFin();
-        float _final = $q.getInicio();
-        Segmento segmento = new Segmento(_inicio, _final, SegmentoTipo.PR);
-    	
-        modify($c){
-        	setSegmentoPR(segmento);
-        }
-end
 
 rule "Creacion de ComplejoQRS"
 	agenda-group "Reglas_Componentes"
 
     when
      	$c : Ciclo( complejoQRS == null )
-      	$q: Onda(tipo == OndaTipo.Q, ciclo == $c)
-     	$s: Onda(tipo == OndaTipo.S, ciclo == $c)
+      	$q: OndaQ(ciclo == $c)
+     	$s: OndaS(ciclo == $c)
     then 
         float _inicio = $q.getInicio();
         float _final = $s.getFin();
@@ -60,58 +44,45 @@ rule "Creacion de ComplejoQRS"
         modify($c){
         	setComplejoQRS(complejo);
         }
+        insert(complejo);
 end
 
-rule "Creacion de Segmento ST"
-	agenda-group "Reglas_Componentes"
-
-    when
-		$c : Ciclo( segmentoST == null )
-      	$s: Onda(tipo == OndaTipo.S, ciclo == $c)
-      	$t: Onda(tipo == OndaTipo.T, ciclo == $c)
-    then
-        float _inicio = $s.getFin();
-        float _final = $t.getInicio();
-        Segmento segmento = new Segmento(_inicio, _final,SegmentoTipo.ST);
-    	
-        modify($c){
-        	setSegmentoST(segmento);
-        }
-end
 
 rule "Creacion de Intervalo QT"
 	agenda-group "Reglas_Componentes"
 
     when
 		$c : Ciclo( intervaloQT == null )
-      	$q: Onda(tipo == OndaTipo.Q, ciclo == $c)
-      	$t: Onda(tipo == OndaTipo.T, ciclo == $c)
+      	$q: OndaQ(ciclo == $c)
+      	$t: OndaT(ciclo == $c)
     then
         float _inicio = $q.getInicio();
         float _final = $t.getFin();
-        Intervalo intervalo = new Intervalo(_inicio, _final,IntervaloTipo.QT);
+        IntervaloQT intervalo = new IntervaloQT(_inicio, _final);
     	
         modify($c){
         	setIntervaloQT(intervalo);
         }
+        insert(intervalo);
 end
 
 rule "Calcular Intervalo RR"
 	agenda-group "Reglas_Componentes"
     when
         $c1 : Ciclo( $indice : indice )
-        $r1: Onda(tipo == OndaTipo.R, ciclo == $c1)
+        $r1: OndaR(ciclo == $c1)
        	$c2 : Ciclo( indice == ($indice + 1), intervaloRR == null)
-		$r2: Onda(tipo == OndaTipo.R, ciclo == $c2)
+		$r2: OndaR(ciclo == $c2)
     then
         // Calcular punto medio de cada onda R
         float inicio = ($r1.getInicio() + $r1.getFin()) / 2;
         float fin = ($r2.getInicio() + $r2.getFin()) / 2;
         
-        Intervalo intervalo = new Intervalo(inicio,fin,IntervaloTipo.RR);
+        IntervaloRR intervalo = new IntervaloRR(inicio,fin);
         modify($c2){
         	setIntervaloRR(intervalo);
        }
+       insert(intervalo);
 end
 
 

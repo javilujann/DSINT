@@ -6,6 +6,7 @@ import elem.ECG
 import elem.Ciclo
 import diagnosticos.*
 import componentes.*
+import patrones.*
 
 
 //declare any global variables here
@@ -18,7 +19,7 @@ rule "Frecuencia cardiaca alta"
     when 
 		$ECG : ECG(frecuenciaCardiaca >= 100)
 	then 
-		PatronPatologico p = new PatronPatologico(Severidad.ALTA,null,TipoPatron.FRECUENCIA_CARDIACA_ALTA);
+		FrecuenciaCardiacaAlta p = new FrecuenciaCardiacaAlta(1,null);
 		insert(p);
 end
 
@@ -28,7 +29,7 @@ rule "Frecuencia cardiaca baja"
     when 
 		$ECG : ECG(frecuenciaCardiaca <= 60)
 	then 
-		PatronPatologico p = new PatronPatologico(Severidad.ALTA,null,TipoPatron.FRECUENCIA_CARDIACA_BAJA);
+		FrecuenciaCardiacaBaja p = new FrecuenciaCardiacaBaja(1,null);
 		insert(p);
 end
 
@@ -36,10 +37,10 @@ rule "Intervalo QT alargado"
 	agenda-group "Reglas_Patrones"
 	
 	when
-		$c : Ciclo(intervaloQT != null, intervaloQT.duracion>500)
-		not (PatronPatologico(tipo == TipoPatron.INTERVALO_QT_ALARGADO))
+		$qt : IntervaloQT(duracion>500)
+		not (IntervaloQtAlargado())
 	then
-		PatronPatologico p = new PatronPatologico(Severidad.ALTA,null,TipoPatron.INTERVALO_QT_ALARGADO);
+		IntervaloQtAlargado p = new IntervaloQtAlargado(1,$qt);
 		insert(p);
 end
 
@@ -48,10 +49,10 @@ agenda-group "Reglas_Patrones"
 	
 
 	when
-    	$t : Onda(tipo == OndaTipo.T,amplitud < -14)
-    	not  (PatronPatologico(tipo == TipoPatron.ONDA_T_MUY_APLANADA))
+    	$t : OndaT(amplitud < -14)
+    	not  (OndaTMuyAplanada())
 	then
-    	PatronPatologico p = new PatronPatologico(Severidad.ALTA,null,TipoPatron.ONDA_T_MUY_APLANADA);
+    	OndaTMuyAplanada p = new OndaTMuyAplanada(1,$t);
 		insert(p);
 end
 
@@ -59,10 +60,10 @@ rule "Onda T Aplanada"
 agenda-group "Reglas_Patrones"
 	
 	when
-    	$t : Onda(tipo == OndaTipo.T,-14 < amplitud,amplitud < -9)
-    	not  (PatronPatologico(tipo == TipoPatron.ONDA_T_APLANADA))
+    	$t : OndaT(-14 < amplitud,amplitud < -9)
+    	not  (OndaTAplanada())
 	then
-    	PatronPatologico p = new PatronPatologico(Severidad.ALTA,null,TipoPatron.ONDA_T_APLANADA);
+    	OndaTAplanada p = new OndaTAplanada(1,$t);
 		insert(p);
 	end
 
@@ -70,10 +71,10 @@ rule "Onda T Hiperaguda"
 agenda-group "Reglas_Patrones"
 	
 	when 
-		$t : Onda(tipo == OndaTipo.T, amplitud > 10)
-		not (PatronPatologico(tipo == TipoPatron.ONDA_T_HIPERAGUDA))
+		$t : OndaT(amplitud > 10)
+		not (OndaTHiperaguda())
 	then 
-		PatronPatologico p = new PatronPatologico(Severidad.ALTA,null,TipoPatron.ONDA_T_HIPERAGUDA);
+		OndaTHiperaguda p = new OndaTHiperaguda(1,$t);
 		insert(p);
 end
 
@@ -81,11 +82,10 @@ rule "Complejo QRS acortado"
 agenda-group "Reglas_Patrones"
 	
 	when
-		$c : Ciclo(complejoQRS != null, complejoQRS.duracion<90)
-		not (PatronPatologico(tipo == TipoPatron.COMPLEJO_QRS_ACORTADO))
+		$c : ComplejoQRS(duracion<90)
+		not (ComplejoQrsAcortado())
 	then 
-		
-		PatronPatologico p = new PatronPatologico(Severidad.ALTA,null,TipoPatron.COMPLEJO_QRS_ACORTADO);
+		ComplejoQrsAcortado p = new ComplejoQrsAcortado(1,$c);
 		insert(p);
 end	
 			

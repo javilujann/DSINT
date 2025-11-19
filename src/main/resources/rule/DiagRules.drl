@@ -4,6 +4,7 @@ package rule
 //list any import classes here.
 import elem.ECG
 import diagnosticos.*
+import patrones.*
 
 
 //declare any global variables here
@@ -14,9 +15,9 @@ rule "Taquicardia"
 	agenda-group "Reglas_Diagnosticos"
 	
     when 
-		$Patron : PatronPatologico(tipo == TipoPatron.FRECUENCIA_CARDIACA_ALTA)
+		$p :FrecuenciaCardiacaAlta()
 	then 
-		Diagnostico d = new Diagnostico(1,$Patron,TipoDiagnostico.TAQUICARDIA,$Patron.getSeveridad());
+		Taquicardia d = new Taquicardia($p.getConfianza(),$p);
 		insert(d);
 end
 
@@ -24,9 +25,9 @@ rule "Bradicardia"
 	agenda-group "Reglas_Diagnosticos"
 	
     when 
-		$Patron : PatronPatologico(tipo == TipoPatron.FRECUENCIA_CARDIACA_BAJA)
+		$p :FrecuenciaCardiacaBaja()
 	then 
-		Diagnostico d = new Diagnostico(1,$Patron,TipoDiagnostico.BRADICARDIA,$Patron.getSeveridad());
+		Bradicardia d = new Bradicardia($p.getConfianza(),$p);
 		insert(d);
 end
 
@@ -34,9 +35,9 @@ rule "Hipocalcemia"
 	agenda-group "Reglas_Diagnosticos"
 	
     when 
-		$Patron : PatronPatologico(tipo == TipoPatron.INTERVALO_QT_ALARGADO)
+		$p : IntervaloQtAlargado()
 	then 
-		Diagnostico d = new Diagnostico(1,$Patron,TipoDiagnostico.HIPOCALCEMIA,$Patron.getSeveridad());
+		Hipocalcemia d = new Hipocalcemia($p.getConfianza(),$p);
 		insert(d);
 end
 
@@ -44,9 +45,9 @@ rule "Hipopotasemia"
 	agenda-group "Reglas_Diagnosticos"
 	
     when 
-		$Patron : PatronPatologico(tipo == TipoPatron.ONDA_T_MUY_APLANADA)
+		$p : OndaTMuyAplanada()
 	then 
-		Diagnostico d = new Diagnostico(1,$Patron,TipoDiagnostico.HIPOPOTASEMIA,$Patron.getSeveridad());
+		Hipopotasemia d = new Hipopotasemia($p.getConfianza(),$p);
 		insert(d);
 end
 
@@ -54,9 +55,9 @@ rule "Isquemia Coronaria"
 	agenda-group "Reglas_Diagnosticos"
 	
     when 
-		$Patron : PatronPatologico(tipo == TipoPatron.ONDA_T_APLANADA)
+		$p : OndaTAplanada()
 	then 
-		Diagnostico d = new Diagnostico(1,$Patron,TipoDiagnostico.ISQUEMIA_CORONARIA,$Patron.getSeveridad());
+		IsquemiaCoronaria d = new IsquemiaCoronaria($p.getConfianza(),$p);
 		insert(d);
 end
 
@@ -64,9 +65,9 @@ rule "Infarto Agudo de Miocardio"
 agenda-group "Reglas_Diagnosticos"
 	
     when 
-		$Patron : PatronPatologico(tipo == TipoPatron.ONDA_T_HIPERAGUDA)
+		$p : OndaTHiperaguda()
 	then 
-		Diagnostico d = new Diagnostico(1,$Patron,TipoDiagnostico.INFARTO_AGUDO_DE_MIOCARDIO,$Patron.getSeveridad());
+		InfartoAgudoMiocardio d = new InfartoAgudoMiocardio($p.getConfianza(),$p);
 		insert(d);
 end
 
@@ -74,9 +75,9 @@ rule "Contracción Ventricular Prematura"
 agenda-group "Reglas_Diagnosticos"
 
 	when
-		$Patron : PatronPatologico(tipo == TipoPatron.COMPLEJO_QRS_ACORTADO)
+		$p : ComplejoQrsAcortado()
 	then 
-		Diagnostico d = new Diagnostico(1,$Patron,TipoDiagnostico.CONTRACCION_VENTRICULAR_PREMATURA,$Patron.getSeveridad());
+		ContraccionVentricularPrematura d = new ContraccionVentricularPrematura($p.getConfianza(),$p);
 		insert(d);
 end	
 
