@@ -34,7 +34,7 @@ public enum Controlador {
 		AtomicInteger cycleIdCounter = new AtomicInteger(1);
 		kSession.setGlobal("cycleIdCounter", cycleIdCounter);
 		
-		// Primera fase: Calculo de componentes + frecuencia		
+		// Primera fase: Calculo de ciclos + componentes + frecuencia		
 	    ondas.forEach(kSession::insert);   // Añadimos la evidencia a la base de hehcos
 	    
 	    kSession.getAgenda().getAgendaGroup("Reglas_Ciclos").setFocus();

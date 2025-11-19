@@ -18,6 +18,11 @@ public abstract class Componente {
 		this.duracion = fin - inicio;
 	}
 	
+	public Componente(float inicio, float fin, Ciclo ciclo) {
+	    this(inicio, fin);
+	    this.ciclo = ciclo;
+	}
+	
 	public float getDuracion() {
 		return duracion;
 	}

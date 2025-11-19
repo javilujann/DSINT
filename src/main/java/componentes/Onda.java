@@ -1,11 +1,18 @@
 package componentes;
 
+import elem.Ciclo;
+
 public class Onda extends Componente {
 
 	private float amplitud;
 
 	public Onda(float amplitud, float inicio, float fin) {
 		super(inicio, fin);
+		this.amplitud = amplitud;
+	}
+	
+	public Onda(float amplitud, float inicio, float fin, Ciclo ciclo) {
+		super(inicio, fin, ciclo);
 		this.amplitud = amplitud;
 	}
 

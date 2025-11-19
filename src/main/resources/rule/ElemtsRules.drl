@@ -20,7 +20,7 @@ rule "Creacion de Intervalo PR"
     then   
         float _inicio = $p.getInicio();
         float _final = $q.getInicio();
-        IntervaloPR intervalo = new IntervaloPR(_inicio, _final);
+        IntervaloPR intervalo = new IntervaloPR(_inicio, _final, $c);
     	
         modify($c){
         	setIntervaloPR(intervalo);
@@ -39,7 +39,7 @@ rule "Creacion de ComplejoQRS"
     then 
         float _inicio = $q.getInicio();
         float _final = $s.getFin();
-        ComplejoQRS complejo = new ComplejoQRS(_inicio, _final);
+        ComplejoQRS complejo = new ComplejoQRS(_inicio, _final, $c);
     	
         modify($c){
         	setComplejoQRS(complejo);
@@ -58,7 +58,7 @@ rule "Creacion de Intervalo QT"
     then
         float _inicio = $q.getInicio();
         float _final = $t.getFin();
-        IntervaloQT intervalo = new IntervaloQT(_inicio, _final);
+        IntervaloQT intervalo = new IntervaloQT(_inicio, _final, $c);
     	
         modify($c){
         	setIntervaloQT(intervalo);
@@ -78,7 +78,7 @@ rule "Calcular Intervalo RR"
         float inicio = ($r1.getInicio() + $r1.getFin()) / 2;
         float fin = ($r2.getInicio() + $r2.getFin()) / 2;
         
-        IntervaloRR intervalo = new IntervaloRR(inicio,fin);
+        IntervaloRR intervalo = new IntervaloRR(inicio,fin, $c2);
         modify($c2){
         	setIntervaloRR(intervalo);
        }
