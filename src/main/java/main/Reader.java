@@ -11,9 +11,8 @@ public enum Reader {
 
     // Regex: tipo (P,Q,R,S,T), start, end, peak (con signo y decimal opcional)
     private final Pattern PATRON_ONDA =
-            Pattern.compile("([PQRST])\\((\\d+),(\\d+),(-?\\d*\\.?\\d+)\\)");
-    
-    private int contador = 0;
+    	    Pattern.compile("([PQRST])\\((\\d+),(\\d+),([-+]?\\d*\\.?\\d+(?:[eE][-+]?\\d+)?)\\)");
+
 
     public List<Onda> leerFichero(String ruta) throws IOException {
         List<Onda> ondas = new ArrayList<>();
@@ -33,20 +32,20 @@ public enum Reader {
                 	
                 	
                     // Extraer datos
+                	String tipoOnda = matcher.group(1);
                     float start = Float.parseFloat(matcher.group(2));
                     float end = Float.parseFloat(matcher.group(3));
                     float peak = Float.parseFloat(matcher.group(4));
 
                     // Crear la onda
                     Onda onda = null;
-                    switch (contador % 5) {
-                    	case 0: onda = new OndaP(peak, start, end); break;
-                    	case 1: onda = new OndaQ(peak, start, end); break;
-                    	case 2: onda = new OndaR(peak, start, end); break;
-                    	case 3: onda = new OndaS(peak, start, end); break;
-                    	case 4: onda = new OndaT(peak, start, end); break;
+                    switch (tipoOnda) {
+                    	case "P" : onda = new OndaP(peak, start, end); break;
+                    	case "Q" : onda = new OndaQ(peak, start, end); break;
+                    	case "R" : onda = new OndaR(peak, start, end); break;
+                    	case "S" : onda = new OndaS(peak, start, end); break;
+                    	case "T" : onda = new OndaT(peak, start, end); break;
                     }
-                    contador++;
                     
                     ondas.add(onda);
                 }
