@@ -28,5 +28,10 @@ public class Diagnostico {
 	public void setEvidencia(PatronPatologico evidencia) {
 		this.evidencia = evidencia;
 	}
+	
+	public String sacarPorPantalla() {
+		String diag = this.getClass().getSimpleName().replaceAll("(?<!^)(?=[A-Z])", " ");
+		return diag + " detectada por: " + evidencia.sacarPorPantalla();
+	}
 
 }

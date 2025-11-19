@@ -57,5 +57,9 @@ public abstract class Componente {
 	public void setCiclo(Ciclo ciclo) {
 		this.ciclo = ciclo;
 	}
+	
+	public String sacarPorPantalla() {
+		return this.getClass().getSimpleName() + " en el ciclo " + this.getCiclo().getIndice();
+	}
 
 }

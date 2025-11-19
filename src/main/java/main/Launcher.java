@@ -54,13 +54,15 @@ public class Launcher {
                 try (BufferedWriter writer = new BufferedWriter(new FileWriter(outFile))) {
 
                     if (diagnosticos.isEmpty()) {
-                        writer.write("El paciente no tiene ningÃºn diagnÃ³stico.\n");
-                        globalWriter.write(file.getName() + ": sin diagnÃ³sticos.\n");
+                        writer.write("El paciente no tiene ningún diagnóstico.\n");
+                        globalWriter.write(file.getName() + ": sin diagnósticos.\n");
                     } else {
-                        writer.write("DiagnÃ³sticos del paciente:\n");
+                        writer.write("Diagnósticos del paciente:\n");
                         for (Diagnostico d : diagnosticos) {
                             writer.write("- " + d.getClass() + "\n");
-                            globalWriter.write(file.getName() + ": " + d.getClass() + " Confianza " +d.getConfianza() +"\n");
+                           
+                            globalWriter.write(file.getName() +": " + d.sacarPorPantalla() + 
+                            		" con Confianza " +d.getConfianza() +"\n");
                         }
                     }
 

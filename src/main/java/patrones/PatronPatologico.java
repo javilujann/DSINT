@@ -38,5 +38,10 @@ public class PatronPatologico {
 	public void setConfianza(float confianza) {
 		this.confianza = confianza;
 	}
+	
+	public String sacarPorPantalla() {
+		String patron = this.getClass().getSimpleName().replaceAll("(?<!^)(?=[A-Z])", " ");
+		return patron + " en componente " + this.componenteAfectada.sacarPorPantalla();
+	}
 
 }
