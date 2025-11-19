@@ -15,7 +15,8 @@ rule "Taquicardia"
 	agenda-group "Reglas_Diagnosticos"
 	
     when 
-		$p :FrecuenciaCardiacaAlta()
+		$p :FrecuenciaCardiacaAlta(confianza >= 0.5)
+		not (Taquicardia())
 	then 
 		Taquicardia d = new Taquicardia($p.getConfianza(),$p);
 		insert(d);
@@ -25,7 +26,8 @@ rule "Bradicardia"
 	agenda-group "Reglas_Diagnosticos"
 	
     when 
-		$p :FrecuenciaCardiacaBaja()
+		$p :FrecuenciaCardiacaBaja(confianza >= 0.5)
+		not (Bradicardia())
 	then 
 		Bradicardia d = new Bradicardia($p.getConfianza(),$p);
 		insert(d);
@@ -35,7 +37,8 @@ rule "Hipocalcemia"
 	agenda-group "Reglas_Diagnosticos"
 	
     when 
-		$p : IntervaloQtAlargado()
+		$p : IntervaloQtAlargado(confianza >= 0.5)
+		not (Hipocalcemia())
 	then 
 		Hipocalcemia d = new Hipocalcemia($p.getConfianza(),$p);
 		insert(d);
@@ -45,7 +48,8 @@ rule "Hipopotasemia"
 	agenda-group "Reglas_Diagnosticos"
 	
     when 
-		$p : OndaTMuyAplanada()
+		$p : OndaTMuyAplanada(confianza >= 0.5)
+		not (Hipopotasemia())
 	then 
 		Hipopotasemia d = new Hipopotasemia($p.getConfianza(),$p);
 		insert(d);
@@ -55,7 +59,8 @@ rule "Isquemia Coronaria"
 	agenda-group "Reglas_Diagnosticos"
 	
     when 
-		$p : OndaTAplanada()
+		$p : OndaTAplanada(confianza >= 0.5)
+		not (IsquemiaCoronaria())
 	then 
 		IsquemiaCoronaria d = new IsquemiaCoronaria($p.getConfianza(),$p);
 		insert(d);
@@ -65,7 +70,8 @@ rule "Infarto Agudo de Miocardio"
 agenda-group "Reglas_Diagnosticos"
 	
     when 
-		$p : OndaTHiperaguda()
+		$p : OndaTHiperaguda(confianza >= 0.5)
+		not (InfartoAgudoMiocardio())
 	then 
 		InfartoAgudoMiocardio d = new InfartoAgudoMiocardio($p.getConfianza(),$p);
 		insert(d);
@@ -75,7 +81,8 @@ rule "Contracción Ventricular Prematura"
 agenda-group "Reglas_Diagnosticos"
 
 	when
-		$p : ComplejoQrsAcortado()
+		$p : ComplejoQrsAcortado(confianza >= 0.5)
+		not (ContraccionVentricularPrematura())
 	then 
 		ContraccionVentricularPrematura d = new ContraccionVentricularPrematura($p.getConfianza(),$p);
 		insert(d);

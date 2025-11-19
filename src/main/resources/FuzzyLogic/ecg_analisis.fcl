@@ -1,0 +1,132 @@
+// Definición del Bloque de Función
+FUNCTION_BLOCK analisis_ecg
+
+// --- 1. VARIABLES DE ENTRADA (Datos que vienen de tus objetos Java) ---
+VAR_INPUT
+    frecuencia : REAL;       // Frecuencia Cardiaca (lpm)
+    duracion_qt : REAL;      // Intervalo QT (ms)
+    amplitud_onda_t : REAL;  // Amplitud Onda T (mV)
+    duracion_qrs : REAL;     // Duracion Complejo QRS (ms)
+END_VAR
+
+// --- 2. VARIABLES DE SALIDA (Grado de certeza para Drools, de 0 a 1) ---
+VAR_OUTPUT
+    prob_bradicardia : REAL;
+    prob_taquicardia : REAL;
+    prob_qt_alargado : REAL;
+    prob_t_muy_aplanada : REAL;
+    prob_t_aplanada : REAL;
+    prob_t_hiperaguda : REAL;
+    prob_qrs_acortado : REAL;
+END_VAR
+
+// --- 3. FUSIFICACIÓN (Convertir datos numéricos a conceptos difusos) ---
+
+// Regla original: frecuencia <= 60 [cite: 37]
+FUZZIFY frecuencia
+    // TERM nombre := (x, y) (x, y) ...
+    // Certeza 1.0 hasta 50 lpm, baja a 0.0 en 65 lpm
+    TERM baja := (0, 1) (50, 1) (65, 0); 
+    
+    // Regla original: frecuencia >= 100 [cite: 36]
+    // Empieza a subir en 90, certeza 1.0 a partir de 110
+    TERM alta := (90, 0) (110, 1) (300, 1);
+END_FUZZIFY
+
+// Regla original: duracion > 500 [cite: 38]
+FUZZIFY duracion_qt
+    TERM alargado := (450, 0) (500, 0.5) (550, 1) (1000, 1);
+END_FUZZIFY
+
+// Reglas originales sobre Amplitud T [cite: 39, 40, 41]
+FUZZIFY amplitud_onda_t
+    // Onda T muy aplanada (< -14)
+    TERM muy_negativa := (-50, 1) (-14, 1) (-10, 0);
+    
+    // Onda T aplanada (entre -14 y -9) - Forma triangular/trapezoidal
+    TERM negativa_leve := (-15, 0) (-12, 1) (-11, 1) (-8, 0);
+    
+    // Onda T Hiperaguda (> 10)
+    TERM alta := (8, 0) (10, 0.5) (12, 1) (50, 1);
+END_FUZZIFY
+
+// Regla original: duracion < 90 [cite: 42]
+FUZZIFY duracion_qrs
+    // Explicación de la curva:
+    // (0, 1)  -> Valores muy bajos son 100% acortados
+    // (70, 1) -> Hasta 70 ms mantenemos la certeza al 100% (para cubrir tu ejemplo de 50 y 70)
+    // (88, 0) -> En 88 ms la certeza baja a 0%.
+    // Resultado: En 90 ms la certeza es 0.0 y NO se dispara la regla.
+    
+    TERM corto := (0, 1) (70, 1) (88, 0);
+END_FUZZIFY
+
+// --- 4. DEFUSIFICACIÓN (Convertir el resultado difuso a un número para Java) ---
+// Usamos el método Centro de Gravedad (COG) [cite: 440]
+
+DEFUZZIFY prob_bradicardia
+    TERM baja_prob := (0,1) (0.2,0);
+    TERM alta_prob := (0.8,0) (1,1);
+    METHOD : COG;
+    DEFAULT := 0;
+END_DEFUZZIFY
+
+DEFUZZIFY prob_taquicardia
+    TERM baja_prob := (0,1) (0.2,0);
+    TERM alta_prob := (0.8,0) (1,1);
+    METHOD : COG;
+    DEFAULT := 0;
+END_DEFUZZIFY
+
+DEFUZZIFY prob_qt_alargado
+    TERM baja_prob := (0,1) (0.2,0);
+    TERM alta_prob := (0.8,0) (1,1);
+    METHOD : COG;
+    DEFAULT := 0;
+END_DEFUZZIFY
+
+DEFUZZIFY prob_t_muy_aplanada
+    TERM baja_prob := (0,1) (0.2,0);
+    TERM alta_prob := (0.8,0) (1,1);
+    METHOD : COG;
+    DEFAULT := 0;
+END_DEFUZZIFY
+
+DEFUZZIFY prob_t_aplanada
+    TERM baja_prob := (0,1) (0.2,0);
+    TERM alta_prob := (0.8,0) (1,1);
+    METHOD : COG;
+    DEFAULT := 0;
+END_DEFUZZIFY
+
+DEFUZZIFY prob_t_hiperaguda
+    TERM baja_prob := (0,1) (0.2,0);
+    TERM alta_prob := (0.8,0) (1,1);
+    METHOD : COG;
+    DEFAULT := 0;
+END_DEFUZZIFY
+
+DEFUZZIFY prob_qrs_acortado
+    TERM baja_prob := (0,1) (0.2,0);
+    TERM alta_prob := (0.8,0) (1,1);
+    METHOD : COG;
+    DEFAULT := 0;
+END_DEFUZZIFY
+
+// --- 5. REGLAS DIFUSAS (Lógica del experto) ---
+RULEBLOCK reglas_diagnostico
+    // Operadores estándar [cite: 473]
+    AND : MIN;
+    ACT : MIN;
+    ACCU : MAX;
+
+    RULE 1 : IF frecuencia IS baja THEN prob_bradicardia IS alta_prob;
+    RULE 2 : IF frecuencia IS alta THEN prob_taquicardia IS alta_prob;
+    RULE 3 : IF duracion_qt IS alargado THEN prob_qt_alargado IS alta_prob;
+    RULE 4 : IF amplitud_onda_t IS muy_negativa THEN prob_t_muy_aplanada IS alta_prob;
+    RULE 5 : IF amplitud_onda_t IS negativa_leve THEN prob_t_aplanada IS alta_prob;
+    RULE 6 : IF amplitud_onda_t IS alta THEN prob_t_hiperaguda IS alta_prob;
+    RULE 7 : IF duracion_qrs IS corto THEN prob_qrs_acortado IS alta_prob;
+END_RULEBLOCK
+
+END_FUNCTION_BLOCK

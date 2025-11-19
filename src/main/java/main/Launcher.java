@@ -60,7 +60,7 @@ public class Launcher {
                         writer.write("Diagnósticos del paciente:\n");
                         for (Diagnostico d : diagnosticos) {
                             writer.write("- " + d.getClass() + "\n");
-                            globalWriter.write(file.getName() + ": " + d.getClass() + "\n");
+                            globalWriter.write(file.getName() + ": " + d.getClass() + " Confianza " +d.getConfianza() +"\n");
                         }
                     }
 
